@@ -242,8 +242,8 @@ void GLWidget::newPlaBase()
 
     // Metode a implementar
     PlaBase *plaBase = new PlaBase();
+    plaBase->make();
     newObjecte(plaBase);
-
 }
 
 void GLWidget::newObj(QString fichero)
