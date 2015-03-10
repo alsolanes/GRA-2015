@@ -1,8 +1,9 @@
 #ifndef BOLA_H
 #define BOLA_H
 
+#include <objecte.h>
 
-class Bola
+class Bola : public Objecte
 {
 public:
     Bola();
