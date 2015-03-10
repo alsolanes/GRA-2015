@@ -11,8 +11,6 @@ PlaBase::PlaBase() : Objecte(NumVertices)
     vertex_colors[1] = color4( 1.0, 1.0, 0.0, 1.0 );
     vertex_colors[2] = color4( 1.0, 1.0, 0.0, 1.0 );
     vertex_colors[3] = color4( 1.0, 1.0, 0.0, 1.0 );
-
-    make();
 }
 
 void PlaBase::quad( int a, int b, int c, int d )
