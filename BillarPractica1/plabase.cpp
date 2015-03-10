@@ -24,11 +24,13 @@ void PlaBase::quad( int a, int b, int c, int d )
     colors[Index] = vertex_colors[c]; points[Index] = vertices[c]; Index++;
     colors[Index] = vertex_colors[d]; points[Index] = vertices[d]; Index++;
 }
+
 void PlaBase::make()
 {
     Index = 0;
     quad( 0, 1, 2, 3 );
 }
+
 PlaBase::~PlaBase()
 {
 
