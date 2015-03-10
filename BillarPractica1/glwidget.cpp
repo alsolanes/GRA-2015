@@ -152,6 +152,10 @@ void GLWidget::paintGL()
        esc->taulaBillar->aplicaTGCentrat(transform);
        esc->draw();
    }
+   if (esc->plaBase!=NULL) {
+       esc->plaBase->aplicaTGCentrat(transform);
+       esc->draw();
+   }
 }
 
 
@@ -182,10 +186,10 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     int dy = event->y() - lastPos.y();
 
     if (event->buttons() & Qt::LeftButton) {
-        setXRotation(xRot + 8 * dy);
+        setXRotation(xRot + 1 * dy);
     } else if (event->buttons() & Qt::RightButton) {
-        setXRotation(xRot + 8 * dy);
-        setZRotation(zRot + 8 * dx);
+        setXRotation(xRot + 1 * dy);
+        setZRotation(zRot + 1 * dx);
     }
     lastPos = event->pos();
 }
@@ -237,6 +241,8 @@ void GLWidget::newPlaBase()
     // Metode que crea un objecte PlaBase poligon amb el punt central al (0,0,0) i perpendicular a Y=0
 
     // Metode a implementar
+    PlaBase *plaBase = new PlaBase();
+    newObjecte(plaBase);
 
 }
 

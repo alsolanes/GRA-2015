@@ -7,17 +7,21 @@ Escena::Escena()
     capsaMinima.a = 1; capsaMinima.h = 1; capsaMinima.p = 1;
 
     taulaBillar = NULL;
+    plaBase = NULL;
 }
 
 Escena::~Escena()
 {
     // Cal anar fent delete dels objectes que se'l hagi fet new
    delete this->taulaBillar;
+   delete this->plaBase;
 }
 
 void Escena::addObjecte(Objecte *obj) {
     if (dynamic_cast<TaulaBillar*>(obj))
         this->taulaBillar = (TaulaBillar*)obj;
+    else if(dynamic_cast<PlaBase*>(obj))
+        this->plaBase = (PlaBase*)obj;
 }
 
 
@@ -50,6 +54,8 @@ void Escena::draw() {
 
     if (taulaBillar!=NULL)
         taulaBillar->draw();
+    if (plaBase != NULL)
+        plaBase->draw();
 
 }
 
