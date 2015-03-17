@@ -148,18 +148,8 @@ void GLWidget::paintGL()
                        RotateZ( zRot / 16.0 ) );
 
    // A modificar si cal girar tots els objectes
-   if (esc->taulaBillar!=NULL) {
-       esc->taulaBillar->aplicaTGCentrat(transform);
-       esc->draw();
-   }
-   if (esc->plaBase!=NULL) {
-       esc->plaBase->aplicaTGCentrat(transform);
-       esc->draw();
-   }
-   if(esc->bola!=NULL){
-       esc->bola->aplicaTGCentrat(transform);
-       esc->draw();
-   }
+   esc->aplicaTGCentrat(transform);
+   esc->draw();
 }
 
 
@@ -231,6 +221,8 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj)
 {
         // Metode a implementar
+    mat4 matEsc = (1/a,float(0),float(0),float(0),float(0),1/h,float(0),float(0),float(0),float(0),1/p,float(0),float(0),float(0), float(0),float(1));
+    obj->aplicaTG(matEsc);
 }
 
 void GLWidget::newObjecte(Objecte * obj)

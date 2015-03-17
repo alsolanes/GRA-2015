@@ -3,7 +3,7 @@
 
 Bola::Bola() : Objecte(NumVertices)
 {
-    tethraedron(7);
+    tethraedron(5);
 
 }
 

@@ -57,7 +57,6 @@ void Escena::aplicaTGCentrat(mat4 m) {
         plaBase->aplicaTGCentrat(m);
     if (bola!=NULL)
         bola->aplicaTGCentrat(m);
-
 }
 
 void Escena::draw() {
@@ -70,7 +69,6 @@ void Escena::draw() {
         plaBase->draw();
     if (bola != NULL)
         bola->draw();
-
 }
 
 

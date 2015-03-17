@@ -2,10 +2,10 @@
 
 PlaBase::PlaBase() : Objecte(NumVertices)
 {
-    vertices[0] = point4( 1, 0, 1, 1.0 );//no es veu res perquè pla paral·lel a y
-    vertices[1] = point4( 1, 0,-1, 1.0 );
-    vertices[2] = point4(-1, 0,-1, 1.0 );
-    vertices[3] = point4(-1, 0, 1, 1.0 );
+    vertices[0] = point4( 1, 1, 0, 1.0 );//no es veu res perquè pla paral·lel a y
+    vertices[3] = point4( 1, -1,0, 1.0 );
+    vertices[2] = point4(-1, -1,0, 1.0 );
+    vertices[1] = point4(-1, 1, 0, 1.0 );
 
     vertex_colors[0] = color4( 1.0, 1.0, 0.0, 1.0 );
     vertex_colors[1] = color4( 1.0, 1.0, 0.0, 1.0 );
