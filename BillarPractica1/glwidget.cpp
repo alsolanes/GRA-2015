@@ -156,6 +156,10 @@ void GLWidget::paintGL()
        esc->plaBase->aplicaTGCentrat(transform);
        esc->draw();
    }
+   if(esc->bola!=NULL){
+       esc->bola->aplicaTGCentrat(transform);
+       esc->draw();
+   }
 }
 
 
@@ -260,6 +264,9 @@ void GLWidget::newBola()
 {
     // Metode que crea la Bola blanca de joc
      // Metode a implementar
+    Bola *bol;
+    bol = new Bola();
+    newObjecte(bol);
 }
 void GLWidget::newConjuntBoles()
 {
