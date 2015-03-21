@@ -7,6 +7,7 @@ class ConjuntBoles
 public:
     ConjuntBoles();
     ~ConjuntBoles();
+    List<Bola> boles;
 };
 
 #endif // CONJUNTBOLES_H

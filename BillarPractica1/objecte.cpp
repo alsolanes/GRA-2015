@@ -41,8 +41,25 @@ Capsa3D Objecte::calculCapsa3D()
     // Metode a implementar: calcula la capsa mínima contenidora d'un objecte
     int i;
     vec3    pmin, pmax;
-
-
+    // Recorrerem tots els punts de l'objecte i ens quedarem amb els punts màxims i mínims de cada coordenada
+    point4 puntActual = points[0];
+    // Inicialitzem els punts
+    pmin.x = pmax.x = puntActual.x;
+    pmin.y = pmax.y = puntActual.y;
+    pmin.z = pmax.z = puntActual.z;
+    for(int i = 0; i<Index; i++){
+        puntActual = points[i];
+        pmin.x = pmin.x < puntActual.x ? pmin.x : puntActual.x;
+        pmin.y = pmin.y < puntActual.y ? pmin.y : puntActual.y;
+        pmin.z = pmin.z < puntActual.z ? pmin.z : puntActual.z;
+        pmax.x = pmax.x > puntActual.x ? pmax.x : puntActual.x;
+        pmax.y = pmax.y > puntActual.y ? pmax.y : puntActual.y;
+        pmax.z = pmax.z > puntActual.z ? pmax.z : puntActual.z;
+    }
+    capsa.a = pmax.x - pmin.x;
+    capsa.h = pmax.y - pmin.y;
+    capsa.p = pmax.z - pmin.z;
+    capsa.pmin = (pmin+pmax)/2;
     return capsa;
 }
 
