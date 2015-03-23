@@ -96,7 +96,14 @@ void Objecte::aplicaTGPoints(mat4 m)
 void Objecte::aplicaTGCentrat(mat4 m)
 {
     // Metode a implementar
-    aplicaTG(m); //provisional!
+    //agafem el centre de l'objecte
+    vec3 punt_mig = vec3(capsa.pmin.x + capsa.a/2, capsa.pmin.y + capsa.h/2, capsa.pmin.z + capsa.p/2);
+    //el desplacem a l'orígen
+    mat4 ToOrigen = Translate(-punt_mig.x, -punt_mig.y, -punt_mig.z);
+    //el retornem al punt inicial
+    mat4 ToPlace = Translate(punt_mig.x, punt_mig.y, punt_mig.z);
+    //apliquem les matrius en ordre invers
+    aplicaTGPoints(ToPlace*m*ToOrigen);
 }
 
 void Objecte::toGPU(QGLShaderProgram *pr){

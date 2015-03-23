@@ -4,6 +4,7 @@
 Bola::Bola() : Objecte(NumVertices)
 {
     tethraedron(5);
+    capsa = calculCapsa3D();
 
 }
 
@@ -63,4 +64,5 @@ vec4 Bola::calculVectorUnitari(const vec4& v)
 
     return out;
 }
+
 

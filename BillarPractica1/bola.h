@@ -10,7 +10,10 @@ public:
     ~Bola();
 
 private:
-    static const int NumVertices = 196608;
+    //NumVertices sera: 4 cares del tetraedre* 12 vertex cada cara * 4**iteracions
+    static const int NumVertices = 100000;
+    color4 vertex_colors[4];
+
     point4 v[4] = {
         vec4( 0.0, 0.0, 1.0, 1.0 ),
         vec4( 0.0, 0.942809, -0.333333, 1.0 ),

@@ -16,6 +16,7 @@
 #include <taulabillar.h>
 #include <plabase.h>
 #include <bola.h>
+#include <conjuntboles.h>
 
 using namespace std;
 
@@ -26,6 +27,7 @@ public:
     ~Escena();
 
     void addObjecte(Objecte *obj);
+    void addConjuntBoles(ConjuntBoles *conjunt_boles);
     void aplicaTG(mat4 m);
 
     void aplicaTGCentrat(mat4 m);
@@ -42,6 +44,7 @@ public:
     TaulaBillar *taulaBillar;
     PlaBase * plaBase;
     Bola * bola;
+    ConjuntBoles *conjuntBoles;
 };
 
 #endif // ESCENA_H

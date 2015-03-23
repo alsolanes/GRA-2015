@@ -4,6 +4,7 @@
 
 #include <glwidget.h>
 #include <QString>
+#include <conjuntboles.h>
 
 
 GLWidget::GLWidget(QWidget *parent)
@@ -196,16 +197,16 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     switch ( event->key() )
     {
     case Qt::Key_Up:
-
+        esc->bola->aplicaTG(Translate(0.0, 0.01, 0.0));
         break;
     case Qt::Key_Down:
-
+        esc->bola->aplicaTG(Translate(0.0, -0.01, 0.0));
         break;
     case Qt::Key_Left:
-
+        esc->bola->aplicaTG(Translate(-0.01, 0.0, 0.0));
         break;
     case Qt::Key_Right:
-
+        esc->bola->aplicaTG(Translate(-0.01, 0.0, 0.0));
         break;
     }
 }
@@ -221,8 +222,12 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
 void GLWidget::adaptaObjecteTamanyWidget(Objecte *obj)
 {
         // Metode a implementar
-    mat4 matEsc = (1/a,float(0),float(0),float(0),float(0),1/h,float(0),float(0),float(0),float(0),1/p,float(0),float(0),float(0), float(0),float(1));
-    obj->aplicaTG(matEsc);
+    Capsa3D capsa_escena = esc->capsaMinima;
+    vec3 centre_escena = capsa_escena.pmin;
+    mat4 T1 = Translate(centre_escena.x/(capsa_escena.a/2), centre_escena.y/(capsa_escena.h/2), centre_escena.z/(capsa_escena.p/2));
+    mat4 S = Scale(1/(a/2), 1/(h/2), 1/(p/2));
+    mat4 T2 = Translate(centre_escena.x, centre_escena.y, centre_escena.z);
+    obj->aplicaTG(T1*S*T2);
 }
 
 void GLWidget::newObjecte(Objecte * obj)
@@ -233,6 +238,7 @@ void GLWidget::newObjecte(Objecte * obj)
 
     updateGL();
 }
+
 void GLWidget::newPlaBase()
 {
     // Metode que crea un objecte PlaBase poligon amb el punt central al (0,0,0) i perpendicular a Y=0
@@ -264,11 +270,39 @@ void GLWidget::newConjuntBoles()
 {
     // Metode que crea les 15 Boles del billar america
     // Metode a implementar
+    // Metode que crea les 15 Boles del billar america
+    ConjuntBoles *conjunt_boles;
 
+    conjunt_boles = new ConjuntBoles();
+    for (int i=0; i<15; i++) {
+            adaptaObjecteTamanyWidget(conjunt_boles->llista_boles[i]);
+
+    }
+    conjunt_boles->toGPU(program);
+    esc->addConjuntBoles(conjunt_boles);
+
+    updateGL();
 }
 void GLWidget::newSalaBillar()
 {
     // Metode que construeix tota la sala de billar: taula, 15 boles i bola blanca
+    newPlaBase();
+    newConjuntBoles();
+    newBola();
+    adaptaObjecteTamanyWidget(esc->bola);
+    adaptaObjecteTamanyWidget(esc->plaBase);
+    //CORREGIR
+    esc->plaBase->aplicaTG(Scale(8., 1., 16.));
+
+    mat4 transforma_bola_blanca = Translate(0., 0.25/10, -5/10.) * Scale(0.25, 0.25, 0.25);
+    esc->bola->aplicaTG(transforma_bola_blanca);
+
+    mat4 transforma_boles= Translate(0., 0.25/10, +2*sqrt(3.)/10.) * Scale(0.25, 0.25, 0.25);
+    esc->conjuntBoles->aplicaTG(transforma_boles);
+
+    esc->aplicaTG(RotateX(-90.));
+
+    updateGL();
 }
 
 // Metode per iniciar la dinàmica del joc
