@@ -6,12 +6,15 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
 {
     points = new point4[npoints];
     colors = new color4[npoints];
+    vertexsTextura = new vec2[npoints];
+    Index=0;
 }
 
 Objecte::Objecte(int npoints, QString n) : numPoints(npoints)
 {
     points = new point4[npoints];
     colors = new color4[npoints];
+    vertexsTextura = new vec2[npoints];
     std::cout<<"Estic en el constructor parametritzat del objecte\n";
 
     xRot = 0;
@@ -47,7 +50,7 @@ Capsa3D Objecte::calculCapsa3D()
     pmin.x = pmax.x = puntActual.x;
     pmin.y = pmax.y = puntActual.y;
     pmin.z = pmax.z = puntActual.z;
-    for(int i = 0; i<Index; i++){
+    for(i = 0; i<Index; i++){
         puntActual = points[i];
         pmin.x = pmin.x < puntActual.x ? pmin.x : puntActual.x;
         pmin.y = pmin.y < puntActual.y ? pmin.y : puntActual.y;
@@ -59,7 +62,7 @@ Capsa3D Objecte::calculCapsa3D()
     capsa.a = pmax.x - pmin.x;
     capsa.h = pmax.y - pmin.y;
     capsa.p = pmax.z - pmin.z;
-    capsa.pmin = (pmin+pmax)/2;
+    capsa.pmin = pmin;
     return capsa;
 }
 
@@ -95,6 +98,7 @@ void Objecte::aplicaTGPoints(mat4 m)
 
 void Objecte::aplicaTGCentrat(mat4 m)
 {
+
     // Metode a implementar
     //agafem el centre de l'objecte
     vec3 punt_mig = vec3(capsa.pmin.x + capsa.a/2, capsa.pmin.y + capsa.h/2, capsa.pmin.z + capsa.p/2);
@@ -103,39 +107,45 @@ void Objecte::aplicaTGCentrat(mat4 m)
     //el retornem al punt inicial
     mat4 ToPlace = Translate(punt_mig.x, punt_mig.y, punt_mig.z);
     //apliquem les matrius en ordre invers
-    aplicaTGPoints(ToPlace*m*ToOrigen);
+    aplicaTG(ToPlace*m*ToOrigen);
+
 }
 
 void Objecte::toGPU(QGLShaderProgram *pr){
+    this->texture->bind(0);
+    this->program = pr;
 
-    program = pr;
-
-    std::cout<<"Passo les dades de l'objecte a la GPU\n";
+    program->setUniformValue("texMap", 0);
 
     glGenBuffers( 1, &buffer );
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(color4) * Index,
+    glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(color4) * Index + sizeof(vec2) * Index,
                   NULL, GL_STATIC_DRAW );
-    program->link();
 
-    program->bind();
+
     glEnable( GL_DEPTH_TEST );
+    glEnable(GL_TEXTURE_2D);
+    program->link();
+    program->bind();
+
 }
 
 // Pintat en la GPU.
 void Objecte::draw()
 {
+    this->texture->bind(0);
 
     // cal activar el buffer de l'objecte. Potser que ja n'hi hagi un altre actiu
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 
-    // per si han canviat les coordenades dels punts
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index, &points[0] );
-    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4) * Index, sizeof(color4) * Index, &colors[0] );
-
     // Per a conservar el buffer
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index, points );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(color4) * Index, sizeof(color4)*Index, colors );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index + sizeof(color4)*Index, sizeof(vec2)*Index, vertexsTextura );
+
     int vertexLocation = program->attributeLocation("vPosition");
     int colorLocation = program->attributeLocation("vColor");
+    int coordTextureLocation = program->attributeLocation("vCoordTexture");
 
     program->enableAttributeArray(vertexLocation);
     program->setAttributeBuffer("vPosition", GL_FLOAT, 0, 4);
@@ -143,12 +153,13 @@ void Objecte::draw()
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer("vColor", GL_FLOAT, sizeof(point4) * Index, 4);
 
+    program->enableAttributeArray(coordTextureLocation);
+    program->setAttributeBuffer("vCoordTexture", GL_FLOAT, sizeof(point4) * Index + sizeof(color4) * Index, 2);
 
-    glPolygonMode(GL_FRONT_AND_BACK,
-                  GL_LINE);
+    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glDrawArrays( GL_TRIANGLES, 0, Index );
 
-    // Abans nomes es feia: glDrawArrays( GL_TRIANGLES, 0, NumVerticesP );
+
 }
 
 void Objecte::make()
@@ -305,4 +316,18 @@ void Objecte::construeix_cara ( char **words, int nwords, Objecte*objActual, int
     objActual->cares.push_back(face);
 }
 
+void Objecte::init_textura()
+ {
+     qDebug() << "Initializing textures...";
+
+
+     // Carregar la textura
+     glActiveTexture(GL_TEXTURE0);
+     texture = new QOpenGLTexture(QImage(this->texture_route));
+     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+     texture->setMagnificationFilter(QOpenGLTexture::Linear);
+
+     texture->bind(0);
+
+ }
 

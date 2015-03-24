@@ -8,7 +8,7 @@
 #include <Common.h>
 #include <cara.h>
 
-
+#include <QOpenGLTexture>
 #include <QGLShaderProgram>
 
 typedef Common::vec4  color4;
@@ -42,7 +42,11 @@ protected:
     point4 *points;
     color4 *colors;
     int Index; // index de control del numero de vertexs a posar a la GPU
+    vec2 *vertexsTextura; // coordenades de textura associades a cada vertex
 
+    QOpenGLTexture *texture;
+    QString texture_route;
+    void init_textura();
 
 public:
 
@@ -75,6 +79,9 @@ public:
     void aplicaTGPoints(mat4 m);
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
+
+
+
 
 private:
     void construeix_cara ( char **words, int nwords, Objecte*objActual, int vindexUlt);

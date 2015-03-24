@@ -82,7 +82,7 @@ private:
 
     // Metode per adaptar l'escena al tamany del widget
     void adaptaObjecteTamanyWidget(Objecte *obj);
-
+    bool isMovePossible(double x, double y);
 
 };
 

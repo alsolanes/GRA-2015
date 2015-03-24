@@ -11,7 +11,7 @@
 #define __ANGEL_H__
 
 //----------------------------------------------------------------------------
-// 
+//
 // --- Include system headers ---
 //
 
@@ -54,7 +54,7 @@ namespace Common {
 //    DEBUG macro is defined.
 const GLfloat  DivideByZeroTolerance = GLfloat(1.0e-07);
 
-//  Degrees-to-radians constant 
+//  Degrees-to-radians constant
 const GLfloat  DegreesToRadians = M_PI / 180.0;
 
 

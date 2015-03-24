@@ -19,6 +19,8 @@ public:
     void draw();
     void toGPU(QGLShaderProgram *prog);
 private:
+    QString texture_routes[QUANTITAT_BOLES];
+
 
 };
 

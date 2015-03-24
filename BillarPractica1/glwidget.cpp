@@ -127,7 +127,8 @@ void GLWidget::initializeGL()
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-
+    glEnable(GL_RGBA);
+    glEnable(GL_DOUBLE);
     std::cout<<"Estic inicialitzant el shaders"<<std::ends;
     initShadersGPU();
 
@@ -139,7 +140,6 @@ void GLWidget::initializeGL()
 void GLWidget::paintGL()
 {
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
    qNormalizeAngle(xRot);
    qNormalizeAngle(yRot);
    qNormalizeAngle(zRot);
@@ -182,10 +182,11 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
     if (event->buttons() & Qt::LeftButton) {
         setXRotation(xRot + 1 * dy);
-        setYRotation(yRot + 1 * dx);
+        //setYRotation(yRot + 1 * dx);
     } else if (event->buttons() & Qt::RightButton) {
-        setXRotation(xRot + 1 * dy);
-        setZRotation(zRot + 1 * dx);
+        //setXRotation(xRot + 1 * dy);
+        //setZRotation(zRot + 1 * dx);
+        setYRotation(yRot + 1 * dx);
     }
     lastPos = event->pos();
 }
@@ -197,18 +198,32 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     switch ( event->key() )
     {
     case Qt::Key_Up:
-        esc->bola->aplicaTG(Translate(0.0, 0.01, 0.0));
+        if(isMovePossible(0,0.01))
+            esc->bola->aplicaTG(Translate(0.0, 0.01, 0.0));
         break;
     case Qt::Key_Down:
-        esc->bola->aplicaTG(Translate(0.0, -0.01, 0.0));
+        if(isMovePossible(0,-0.01))
+            esc->bola->aplicaTG(Translate(0.0, -0.01, 0.0));
         break;
     case Qt::Key_Left:
-        esc->bola->aplicaTG(Translate(-0.01, 0.0, 0.0));
+        if(isMovePossible(-0.01,0))
+            esc->bola->aplicaTG(Translate(-0.01, 0.0, 0.0));
         break;
     case Qt::Key_Right:
-        esc->bola->aplicaTG(Translate(-0.01, 0.0, 0.0));
+        if(isMovePossible(-0.01,0))
+            esc->bola->aplicaTG(Translate(-0.01, 0.0, 0.0));
         break;
     }
+    updateGL();
+}
+
+bool GLWidget::isMovePossible(double x, double z){
+    vec3 bola_min = esc->bola->capsa.pmin;
+    vec3 pla_min = esc->plaBase->capsa.pmin;
+    if((bola_min.x+x)>pla_min.x && (bola_min.x+x)<(pla_min.x+esc->plaBase->capsa.a))
+       if((bola_min.z+z)<(pla_min.z+esc->plaBase->capsa.p) && (bola_min.z+z)>pla_min.z)
+                return true;
+    return false;
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *event)
@@ -270,7 +285,6 @@ void GLWidget::newConjuntBoles()
 {
     // Metode que crea les 15 Boles del billar america
     // Metode a implementar
-    // Metode que crea les 15 Boles del billar america
     ConjuntBoles *conjunt_boles;
 
     conjunt_boles = new ConjuntBoles();
@@ -285,24 +299,17 @@ void GLWidget::newConjuntBoles()
 }
 void GLWidget::newSalaBillar()
 {
-    // Metode que construeix tota la sala de billar: taula, 15 boles i bola blanca
     newPlaBase();
-    newConjuntBoles();
+    esc->plaBase->aplicaTG(Scale(5., 0., 10.));
     newBola();
-    adaptaObjecteTamanyWidget(esc->bola);
-    adaptaObjecteTamanyWidget(esc->plaBase);
-    //CORREGIR
-    esc->plaBase->aplicaTG(Scale(8., 1., 16.));
+    esc->bola->aplicaTG(Translate(0,0.03,.6)*Scale(0.3,0.3,0.3));
+    newConjuntBoles();
+    esc->conjuntBoles->aplicaTG(Translate(-0.1,0.03,-0.5)*Scale(0.3,0.3,0.3));
 
-    mat4 transforma_bola_blanca = Translate(0., 0.25/10, -5/10.) * Scale(0.25, 0.25, 0.25);
-    esc->bola->aplicaTG(transforma_bola_blanca);
-
-    mat4 transforma_boles= Translate(0., 0.25/10, +2*sqrt(3.)/10.) * Scale(0.25, 0.25, 0.25);
-    esc->conjuntBoles->aplicaTG(transforma_boles);
-
-    esc->aplicaTG(RotateX(-90.));
-
+    esc->aplicaTG(RotateX(-90));
+    esc->aplicaTG(RotateZ(-180));
     updateGL();
+
 }
 
 // Metode per iniciar la dinàmica del joc

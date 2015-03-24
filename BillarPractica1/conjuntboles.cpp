@@ -1,20 +1,29 @@
 #include "conjuntboles.h"
+#include "sstream"
 
 ConjuntBoles::ConjuntBoles()
 {
-    int index_bola;
-    for(int i = 0; i<QUANTITAT_BOLES; i++)
-        llista_boles[i] = new Bola();
-    index_bola = 0;
+
+    for(int i = 0; i<QUANTITAT_BOLES;i++)
+    {
+        int a = i+1;
+        stringstream ss;
+        ss << a;
+        QString str = QString::fromStdString(ss.str());
+        texture_routes[i] = "://resources/Bola"+str+".jpg";
+    }
+
+    int index_bola = 0;
 
     for(int i=0;i<5;i++)
         for(int j=0;j<5-i;j++){
-            points_boles[index_bola] = new vec4(i+j,0.0,2*i,1.0);
+            points_boles[index_bola] = new vec4(i+j*2,0.0,2*i,1.0);
             index_bola++;
         }
 
-    for (int i=0; i<QUANTITAT_BOLES; i++)
-        llista_boles[i]->aplicaTG(Translate(*points_boles[i]));
+    for(int i = 0; i<QUANTITAT_BOLES; i++){
+        llista_boles[i] = new Bola(texture_routes[i]);
+        llista_boles[i]->aplicaTG(Translate(*points_boles[i]));}
 
 }
 

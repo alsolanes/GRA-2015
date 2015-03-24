@@ -2,15 +2,17 @@
 #define PLABASE_H
 #include <objecte.h>
 
-const int NumVertices = 6;
+
 
 class PlaBase : public Objecte
 {
 public:
     PlaBase();
-    virtual void make();
+    void make();
     ~PlaBase();
+
 private:
+    const int NumVertices = 6;
     int a;
     int p;
 
