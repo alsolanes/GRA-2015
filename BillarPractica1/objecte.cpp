@@ -318,9 +318,7 @@ void Objecte::construeix_cara ( char **words, int nwords, Objecte*objActual, int
 
 void Objecte::init_textura()
  {
-     qDebug() << "Initializing textures...";
-
-
+     qDebug() << "Initializing textures..." << endl;
      // Carregar la textura
      glActiveTexture(GL_TEXTURE0);
      texture = new QOpenGLTexture(QImage(this->texture_route));
@@ -328,6 +326,6 @@ void Objecte::init_textura()
      texture->setMagnificationFilter(QOpenGLTexture::Linear);
 
      texture->bind(0);
-
+     qDebug() << "Objecte::FI init_textura" << endl;
  }
 

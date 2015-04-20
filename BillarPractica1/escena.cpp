@@ -22,11 +22,11 @@ Escena::~Escena()
 }
 
 void Escena::addObjecte(Objecte *obj) {
-    if (dynamic_cast<TaulaBillar*>(obj))
+    if (dynamic_cast<TaulaBillar*>(obj) && taulaBillar==NULL)
         this->taulaBillar = (TaulaBillar*)obj;
-    else if(dynamic_cast<PlaBase*>(obj))
+    else if(dynamic_cast<PlaBase*>(obj) && plaBase==NULL)
         this->plaBase = (PlaBase*)obj;
-    else if(dynamic_cast<Bola*>(obj))
+    else if(dynamic_cast<Bola*>(obj) && bola==NULL)
         this->bola = (Bola*)obj;
 }
 void Escena::addConjuntBoles(ConjuntBoles *conjunt_boles){

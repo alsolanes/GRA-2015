@@ -72,11 +72,14 @@ using namespace Common;
 typedef struct {
       vec3 pmin;
       GLfloat a, h, p;
+      //afegim el centre de la capsa per a operar transformacions
+      vec3 centre;
 } Capsa3D;
 
 typedef struct {
       vec2 pmin;
       float a, h;
+      vec2 centre;
 } Capsa2D;
 
 

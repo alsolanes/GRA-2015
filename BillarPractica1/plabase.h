@@ -9,17 +9,18 @@ class PlaBase : public Objecte
 public:
     PlaBase();
     void make();
+    void quad(int a, int b, int c, int d);
     ~PlaBase();
 
 private:
-    const int NumVertices = 6;
+    static const int NumVertices = 6;
     int a;
     int p;
 
     point4 vertices[4];
     color4 vertex_colors[4];
 
-    void quad(int a, int b, int c, int d);
+
 };
 
 #endif // PLABASE_H

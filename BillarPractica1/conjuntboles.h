@@ -5,7 +5,7 @@
 
 #define QUANTITAT_BOLES 15
 
-class ConjuntBoles
+class ConjuntBoles : public Objecte
 {
 public:
     ConjuntBoles();
@@ -18,6 +18,8 @@ public:
     void aplicaTGCentrat(mat4 m);
     void draw();
     void toGPU(QGLShaderProgram *prog);
+    Capsa3D calculCapsa3D();
+    void toOrigin();
 private:
     QString texture_routes[QUANTITAT_BOLES];
 

@@ -127,8 +127,7 @@ void GLWidget::initializeGL()
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glEnable(GL_RGBA);
-    glEnable(GL_DOUBLE);
+
     std::cout<<"Estic inicialitzant el shaders"<<std::ends;
     initShadersGPU();
 
@@ -181,12 +180,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     int dy = event->y() - lastPos.y();
 
     if (event->buttons() & Qt::LeftButton) {
-        setXRotation(xRot + 1 * dy);
+        setXRotation(xRot + 8 * dy);
         //setYRotation(yRot + 1 * dx);
     } else if (event->buttons() & Qt::RightButton) {
         //setXRotation(xRot + 1 * dy);
         //setZRotation(zRot + 1 * dx);
-        setYRotation(yRot + 1 * dx);
+        setYRotation(yRot + 8 * dx);
     }
     lastPos = event->pos();
 }
@@ -259,9 +258,7 @@ void GLWidget::newPlaBase()
     // Metode que crea un objecte PlaBase poligon amb el punt central al (0,0,0) i perpendicular a Y=0
 
     // Metode a implementar
-    PlaBase *plaBase = new PlaBase();
-    plaBase->make();
-    newObjecte(plaBase);
+    newObjecte(new PlaBase());
 }
 
 void GLWidget::newObj(QString fichero)

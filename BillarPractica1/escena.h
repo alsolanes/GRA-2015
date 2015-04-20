@@ -42,9 +42,10 @@ public:
     // Objectes de l'escena: a modificar. Ara nomes té un objecte: la taula de billar.
     // Cal afegir la bola blanca o el pla base per testejar o les 15 boles
     TaulaBillar *taulaBillar;
-    PlaBase * plaBase;
-    Bola * bola;
+    PlaBase *plaBase;
+    Bola *bola;
     ConjuntBoles *conjuntBoles;
+    vector<Objecte *> llista_objectes;
 };
 
 #endif // ESCENA_H
