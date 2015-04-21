@@ -59,7 +59,8 @@ SOURCES       = ../BillarPractica1/main.cpp \
 		../BillarPractica1/readfile.cpp \
 		../BillarPractica1/plabase.cpp \
 		../BillarPractica1/bola.cpp \
-		../BillarPractica1/conjuntboles.cpp qrc_resources.cpp \
+		../BillarPractica1/conjuntboles.cpp \
+		../BillarPractica1/camera.cpp qrc_resources.cpp \
 		moc_mainwindow.cpp \
 		moc_glwidget.cpp \
 		moc_objecte.cpp
@@ -75,6 +76,7 @@ OBJECTS       = main.o \
 		plabase.o \
 		bola.o \
 		conjuntboles.o \
+		camera.o \
 		qrc_resources.o \
 		moc_mainwindow.o \
 		moc_glwidget.o \
@@ -208,7 +210,8 @@ DIST          = /opt/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../BillarPractica1/readfile.h \
 		../BillarPractica1/plabase.h \
 		../BillarPractica1/bola.h \
-		../BillarPractica1/conjuntboles.h ../BillarPractica1/main.cpp \
+		../BillarPractica1/conjuntboles.h \
+		../BillarPractica1/camera.h ../BillarPractica1/main.cpp \
 		../BillarPractica1/mainwindow.cpp \
 		../BillarPractica1/glwidget.cpp \
 		../BillarPractica1/Common.cpp \
@@ -219,7 +222,8 @@ DIST          = /opt/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../BillarPractica1/readfile.cpp \
 		../BillarPractica1/plabase.cpp \
 		../BillarPractica1/bola.cpp \
-		../BillarPractica1/conjuntboles.cpp
+		../BillarPractica1/conjuntboles.cpp \
+		../BillarPractica1/camera.cpp
 QMAKE_TARGET  = BillarPractica1
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = BillarPractica1
@@ -512,8 +516,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../BillarPractica1/resources.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../BillarPractica1/mainwindow.h ../BillarPractica1/vec.h ../BillarPractica1/mat.h ../BillarPractica1/glwidget.h ../BillarPractica1/Common.h ../BillarPractica1/escena.h ../BillarPractica1/objecte.h ../BillarPractica1/taulabillar.h ../BillarPractica1/cara.h ../BillarPractica1/readfile.h ../BillarPractica1/plabase.h ../BillarPractica1/bola.h ../BillarPractica1/conjuntboles.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../BillarPractica1/main.cpp ../BillarPractica1/mainwindow.cpp ../BillarPractica1/glwidget.cpp ../BillarPractica1/Common.cpp ../BillarPractica1/escena.cpp ../BillarPractica1/objecte.cpp ../BillarPractica1/taulabillar.cpp ../BillarPractica1/cara.cpp ../BillarPractica1/readfile.cpp ../BillarPractica1/plabase.cpp ../BillarPractica1/bola.cpp ../BillarPractica1/conjuntboles.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../BillarPractica1/mainwindow.h ../BillarPractica1/vec.h ../BillarPractica1/mat.h ../BillarPractica1/glwidget.h ../BillarPractica1/Common.h ../BillarPractica1/escena.h ../BillarPractica1/objecte.h ../BillarPractica1/taulabillar.h ../BillarPractica1/cara.h ../BillarPractica1/readfile.h ../BillarPractica1/plabase.h ../BillarPractica1/bola.h ../BillarPractica1/conjuntboles.h ../BillarPractica1/camera.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../BillarPractica1/main.cpp ../BillarPractica1/mainwindow.cpp ../BillarPractica1/glwidget.cpp ../BillarPractica1/Common.cpp ../BillarPractica1/escena.cpp ../BillarPractica1/objecte.cpp ../BillarPractica1/taulabillar.cpp ../BillarPractica1/cara.cpp ../BillarPractica1/readfile.cpp ../BillarPractica1/plabase.cpp ../BillarPractica1/bola.cpp ../BillarPractica1/conjuntboles.cpp ../BillarPractica1/camera.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../BillarPractica1/mainwindow.ui $(DISTDIR)/
 
 
@@ -680,13 +684,16 @@ moc_mainwindow.cpp: /opt/Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
 		../BillarPractica1/objecte.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QObject \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintengine.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpainter.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
@@ -703,6 +710,7 @@ moc_mainwindow.cpp: /opt/Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
 		../BillarPractica1/taulabillar.h \
 		../BillarPractica1/plabase.h \
 		../BillarPractica1/bola.h \
+		../BillarPractica1/conjuntboles.h \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgets \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgetsDepends \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QtCore \
@@ -735,7 +743,6 @@ moc_mainwindow.cpp: /opt/Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstandardpaths.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstorageinfo.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporarydir.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporaryfile.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractproxymodel.h \
@@ -867,7 +874,6 @@ moc_mainwindow.cpp: /opt/Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglpixeltransferoptions.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltimerquery.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbackingstore.h \
@@ -1094,40 +1100,43 @@ moc_glwidget.cpp: ../BillarPractica1/escena.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -1169,6 +1178,7 @@ moc_glwidget.cpp: ../BillarPractica1/escena.h \
 		../BillarPractica1/taulabillar.h \
 		../BillarPractica1/plabase.h \
 		../BillarPractica1/bola.h \
+		../BillarPractica1/conjuntboles.h \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgets \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgetsDepends \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QtCore \
@@ -1201,7 +1211,6 @@ moc_glwidget.cpp: ../BillarPractica1/escena.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstandardpaths.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstorageinfo.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporarydir.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporaryfile.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractproxymodel.h \
@@ -1334,7 +1343,6 @@ moc_glwidget.cpp: ../BillarPractica1/escena.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglpixeltransferoptions.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltimerquery.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbackingstore.h \
@@ -1561,40 +1569,43 @@ moc_objecte.cpp: /opt/Qt/5.4/gcc_64/include/QtCore/QObject \
 		../BillarPractica1/vec.h \
 		../BillarPractica1/mat.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -1775,13 +1786,16 @@ main.o: ../BillarPractica1/main.cpp /opt/Qt/5.4/gcc_64/include/QtWidgets/QApplic
 		../BillarPractica1/objecte.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QObject \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintengine.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpainter.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
@@ -1798,6 +1812,7 @@ main.o: ../BillarPractica1/main.cpp /opt/Qt/5.4/gcc_64/include/QtWidgets/QApplic
 		../BillarPractica1/taulabillar.h \
 		../BillarPractica1/plabase.h \
 		../BillarPractica1/bola.h \
+		../BillarPractica1/conjuntboles.h \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgets \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgetsDepends \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QtCore \
@@ -1830,7 +1845,6 @@ main.o: ../BillarPractica1/main.cpp /opt/Qt/5.4/gcc_64/include/QtWidgets/QApplic
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstandardpaths.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstorageinfo.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporarydir.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporaryfile.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractproxymodel.h \
@@ -1958,7 +1972,6 @@ main.o: ../BillarPractica1/main.cpp /opt/Qt/5.4/gcc_64/include/QtWidgets/QApplic
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglpixeltransferoptions.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltimerquery.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbackingstore.h \
@@ -2577,15 +2590,6 @@ mainwindow.o: ../BillarPractica1/mainwindow.cpp /opt/Qt/5.4/gcc_64/include/QtWid
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/qtoolbutton.h \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/qtwidgetsversion.h \
 		ui_mainwindow.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QAction \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QApplication \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QButtonGroup \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QHeaderView \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QMenu \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QMenuBar \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QStatusBar \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/QToolBar \
 		../BillarPractica1/glwidget.h \
 		../BillarPractica1/escena.h \
 		../BillarPractica1/Common.h \
@@ -2593,6 +2597,7 @@ mainwindow.o: ../BillarPractica1/mainwindow.cpp /opt/Qt/5.4/gcc_64/include/QtWid
 		../BillarPractica1/mat.h \
 		../BillarPractica1/objecte.h \
 		../BillarPractica1/cara.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
@@ -2601,9 +2606,11 @@ mainwindow.o: ../BillarPractica1/mainwindow.cpp /opt/Qt/5.4/gcc_64/include/QtWid
 		../BillarPractica1/taulabillar.h \
 		../BillarPractica1/plabase.h \
 		../BillarPractica1/bola.h \
+		../BillarPractica1/conjuntboles.h \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLWidget \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QTime \
-		../BillarPractica1/mainwindow.h
+		../BillarPractica1/mainwindow.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/QMainWindow
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../BillarPractica1/mainwindow.cpp
 
 glwidget.o: ../BillarPractica1/glwidget.cpp ../BillarPractica1/glwidget.h \
@@ -2663,40 +2670,43 @@ glwidget.o: ../BillarPractica1/glwidget.cpp ../BillarPractica1/glwidget.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -2738,6 +2748,7 @@ glwidget.o: ../BillarPractica1/glwidget.cpp ../BillarPractica1/glwidget.h \
 		../BillarPractica1/taulabillar.h \
 		../BillarPractica1/plabase.h \
 		../BillarPractica1/bola.h \
+		../BillarPractica1/conjuntboles.h \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgets \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/QtWidgetsDepends \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QtCore \
@@ -2770,7 +2781,6 @@ glwidget.o: ../BillarPractica1/glwidget.cpp ../BillarPractica1/glwidget.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstandardpaths.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstorageinfo.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporarydir.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qtemporaryfile.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qabstractproxymodel.h \
@@ -2903,7 +2913,6 @@ glwidget.o: ../BillarPractica1/glwidget.cpp ../BillarPractica1/glwidget.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglpixeltransferoptions.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltimerquery.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglvertexarrayobject.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbackingstore.h \
@@ -3137,40 +3146,43 @@ escena.o: ../BillarPractica1/escena.cpp ../BillarPractica1/escena.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -3211,7 +3223,8 @@ escena.o: ../BillarPractica1/escena.cpp ../BillarPractica1/escena.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qgenericmatrix.h \
 		../BillarPractica1/taulabillar.h \
 		../BillarPractica1/plabase.h \
-		../BillarPractica1/bola.h
+		../BillarPractica1/bola.h \
+		../BillarPractica1/conjuntboles.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o escena.o ../BillarPractica1/escena.cpp
 
 objecte.o: ../BillarPractica1/objecte.cpp ../BillarPractica1/objecte.h \
@@ -3269,40 +3282,43 @@ objecte.o: ../BillarPractica1/objecte.cpp ../BillarPractica1/objecte.h \
 		../BillarPractica1/vec.h \
 		../BillarPractica1/mat.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -3400,40 +3416,43 @@ taulabillar.o: ../BillarPractica1/taulabillar.cpp ../BillarPractica1/taulabillar
 		../BillarPractica1/vec.h \
 		../BillarPractica1/mat.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -3578,40 +3597,43 @@ plabase.o: ../BillarPractica1/plabase.cpp ../BillarPractica1/plabase.h \
 		../BillarPractica1/vec.h \
 		../BillarPractica1/mat.h \
 		../BillarPractica1/cara.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
-		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
-		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
-		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
-		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
@@ -3708,16 +3730,280 @@ bola.o: ../BillarPractica1/bola.cpp ../BillarPractica1/bola.h \
 		../BillarPractica1/vec.h \
 		../BillarPractica1/mat.h \
 		../BillarPractica1/cara.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qset.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintengine.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QSurfaceFormat \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qsurfaceformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qvector3d.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qvector4d.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix4x4.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qquaternion.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qgenericmatrix.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bola.o ../BillarPractica1/bola.cpp
+
+conjuntboles.o: ../BillarPractica1/conjuntboles.cpp ../BillarPractica1/conjuntboles.h \
+		../BillarPractica1/bola.h \
+		../BillarPractica1/objecte.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QObject \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../BillarPractica1/Common.h \
+		../BillarPractica1/vec.h \
+		../BillarPractica1/mat.h \
+		../BillarPractica1/cara.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QOpenGLTexture \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengltexture.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qline.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/QScopedPointer \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		/opt/Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qset.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintengine.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglcolormap.h \
+		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qtopenglglobal.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/QSurfaceFormat \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qsurfaceformat.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qvector3d.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qvector4d.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix4x4.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qquaternion.h \
+		/opt/Qt/5.4/gcc_64/include/QtGui/qgenericmatrix.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o conjuntboles.o ../BillarPractica1/conjuntboles.cpp
+
+camera.o: ../BillarPractica1/camera.cpp ../BillarPractica1/camera.h \
+		../BillarPractica1/Common.h \
+		../BillarPractica1/vec.h \
+		../BillarPractica1/mat.h \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/QGLShaderProgram \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qglshaderprogram.h \
 		/opt/Qt/5.4/gcc_64/include/QtOpenGL/qgl.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengl.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qt_windows.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopengles2ext.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qopenglext.h \
 		/opt/Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		/opt/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qmargins.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
 		/opt/Qt/5.4/gcc_64/include/QtCore/qrect.h \
@@ -3780,10 +4066,7 @@ bola.o: ../BillarPractica1/bola.cpp ../BillarPractica1/bola.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qmatrix4x4.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qquaternion.h \
 		/opt/Qt/5.4/gcc_64/include/QtGui/qgenericmatrix.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bola.o ../BillarPractica1/bola.cpp
-
-conjuntboles.o: ../BillarPractica1/conjuntboles.cpp ../BillarPractica1/conjuntboles.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o conjuntboles.o ../BillarPractica1/conjuntboles.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camera.o ../BillarPractica1/camera.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
