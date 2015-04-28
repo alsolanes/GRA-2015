@@ -23,6 +23,5 @@
         <file>resources/pal.obj</file>
         <file>resources/taula.mtl</file>
         <file>resources/taula.obj</file>
-        <file>resources/mosaic.png</file>
     </qresource>
 </RCC>
