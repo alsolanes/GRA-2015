@@ -147,13 +147,27 @@ void GLWidget::initializeGL()
 
     glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), clearColor.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// codi comentat per errors en l'execucio
+    //    if(cameraActual){
+//        esc->camGeneral->toGPU(program);
+//    }else{
+//        esc->camPrimeraP->toGPU(program);
+//    }
 
 }
 
 void GLWidget::paintGL()
 {
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
+// codi comentat, ja que intentant posar els mètodes on toquen no ens ha funcionat
+//   if(cameraActual){
+//       esc->camGeneral->CalculaMatriuModelView();
+//       esc->camGeneral->CalculaMatriuProjection();
+//   }else{
+//       esc->camPrimeraP->CalculaMatriuModelView();
+//       esc->camPrimeraP->CalculaMatriuProjection();
+//   }
+//   esc->draw(cameraActual);
    esc->draw();
 }
 
@@ -171,6 +185,12 @@ void GLWidget::resizeGL(int width, int height)
     glOrtho(-1.5, +1.5, -1.5, +1.5, 0.0, 15.0);
 #endif
     glMatrixMode(GL_MODELVIEW);
+// codi comentat ja que el viewport ja l'he definit
+//    if(cameraActual==true){
+//        esc->camGeneral->setViewport(0, 0, width, height);
+//    }else{
+//        esc->camPrimeraP->setViewport(0, 0, width, height);
+//    }
 
 
 }
