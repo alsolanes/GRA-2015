@@ -371,8 +371,7 @@ void GLWidget::newSalaBillar()
 
     esc->CapsaMinCont3DEscena();
     esc->iniCamera(true, this->size().width(), this->size().height(), program);
-    if(cameraActual) esc->camGeneral->toGPU();
-    else esc->camPrimeraP->toGPU();
+    esc->camGeneral->toGPU();
 
     updateGL();
 }

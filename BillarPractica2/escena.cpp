@@ -117,32 +117,26 @@ void Escena::move(bool cameraGeneral, int dir){
         if(cameraGeneral)
             vecMoviment = plaBase->vectorVertical();
         else
-            vecMoviment = -normalize(bola->capsa.centre - conjuntBoles->capsa.centre);
+            vecMoviment = normalize(vec3(0,0,1));
         break;
     case 2: //down
         if(cameraGeneral)
             vecMoviment = -plaBase->vectorVertical();
         else
-            vecMoviment = normalize(bola->capsa.centre - conjuntBoles->capsa.centre);
+            vecMoviment = -normalize(vec3(0,0,1));
         break;
     case 3: //left
         if(cameraGeneral)
             vecMoviment = plaBase->vectorHoritzontal();
         else{
-            vecMoviment = normalize(conjuntBoles->capsa.centre - bola->capsa.centre);
-            float aux = vecMoviment.x;
-            vecMoviment.x = vecMoviment.z;
-            vecMoviment.z = -aux;
+            vecMoviment = normalize(vec3(1,0,0));
         }
         break;
     case 4: //right
         if(cameraGeneral)
             vecMoviment = -plaBase->vectorHoritzontal();
         else{
-            vecMoviment = normalize(conjuntBoles->capsa.centre - bola->capsa.centre);
-            float aux = vecMoviment.x;
-            vecMoviment.x = -vecMoviment.z;
-            vecMoviment.z = aux;
+            vecMoviment = normalize(vec3(-1,0,0));
         }
         break;
     }
@@ -221,7 +215,7 @@ void Escena::iniCamera(bool camGeneral, int ampladaViewport, int alcadaViewport,
 
     this->camPrimeraP->piram.proj = PERSPECTIVA;
     this->camPrimeraP->ini(ampladaViewport, alcadaViewport, capsaMinima, this->program);
-    setVRPCamera(false,point4(bola->capsa.pmin,1));
+    setVRPCamera(false,point4(bola->capsa.centre,1));
     setDCamera(false, 5);
     this->camPrimeraP->vs.obs = this->camPrimeraP->vs.vrp - vec4(0, -ALCADA_1P, DISTANCIA_1P, 1);
     this->camPrimeraP->vs.vup = vec4(0, 1, 0, 0); // verticalitat en y
@@ -261,10 +255,13 @@ void Escena::setVRPCamera(bool camGeneral, point4 vrp){
     }
     else{
         //agafem la distancia de la bola a la camera i ho apliquem al vector normalitzat que formen
-        vec3 aux = DISTANCIA_1P * normalize(bola->capsa.centre - conjuntBoles->capsa.centre);
+        vec3 aux = DISTANCIA_1P * normalize(vec3(0,0.5,-4.5));
         aux += ALCADA_1P * vec3(0, 1, 0); //definim l'alçada de la camera
         vec3 nouObs = bola->capsa.centre + aux;
-        this->camPrimeraP->vs.obs = vec4(nouObs.x, nouObs.y, nouObs.z, 1.);
+        this->camPrimeraP->vs.obs = this->camPrimeraP->CalculObs(this->camPrimeraP->vs.vrp,
+                                                                 2,
+                                                                 this->camPrimeraP->vs.angx,
+                                                                 this->camPrimeraP->vs.angy) + aux;
         this->camPrimeraP->CalculAngleOberturaVertical();
         this->camPrimeraP->CalculAngleOberturaHoritzontal();
         this->camPrimeraP->vs.vrp = vrp;
