@@ -38,7 +38,7 @@ protected:
     GLuint buffer; // Buffer de comunicacio amb la GPU
 
     // Estructures de vertexs i colors per passar a la GPU
-    int numPoints;
+    int     numPoints;
     point4 *points;
     color4 *colors;
     int Index; // index de control del numero de vertexs a posar a la GPU
@@ -46,6 +46,7 @@ protected:
 
     QOpenGLTexture *texture;
     QString texture_path;
+
     void init_textura();
 
 public:
@@ -80,12 +81,8 @@ public:
     // Aplica una TG centrada en el punt central de la capsa de l'objecte a un objecte
     void aplicaTGCentrat(mat4 m);
 
-
-
-
 private:
     void construeix_cara ( char **words, int nwords, Objecte*objActual, int vindexUlt);
-
 };
 
 

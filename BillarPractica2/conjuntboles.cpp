@@ -17,8 +17,8 @@ ConjuntBoles::ConjuntBoles() : Objecte(0)
     int index_bola = 0;
 
     for(int i=0;i<5;i++){
-        for(int j=0;j<5-i;j++){
-            points_boles[index_bola] = new vec4(i+j*2,0.0,2*i,1.0);
+        for(int j=0;j<i+1;j++){
+            points_boles[index_bola] = new vec4(-i+j*2,0.0,2*i,1.0);
             index_bola++;
         }
     }
@@ -72,30 +72,35 @@ void ConjuntBoles::toGPU(QGLShaderProgram *prog){
 }
 
 Capsa3D ConjuntBoles::calculCapsa3D() {
-    vec3 pmin, pmax, bolamin, bolamax;
-    pmin = llista_boles[0]->capsa.pmin;
-    pmax = pmin + vec3(llista_boles[0]->capsa.a, llista_boles[0]->capsa.h, llista_boles[0]->capsa.p);
-    //mirem els punts minims i màxims per calcular la capsa3d
-    for(int i = 1; i<QUANTITAT_BOLES;i++){
-        bolamin = llista_boles[i]->capsa.pmin;
-        bolamax = bolamin + vec3(llista_boles[i]->capsa.a, llista_boles[i]->capsa.h, llista_boles[i]->capsa.p);
+    Capsa3D capsa, capsaAux;
 
-        pmin.x = bolamin.x < pmin.x ? bolamin.x : pmin.x;
-        pmax.x = bolamax.x > pmax.x ? bolamax.x : pmax.x;
+    vec3 puntMin, puntMax; //centremin, centremax
+    float maxA, maxH, maxP;
+    maxA = maxH = maxP = 0;
+    capsaAux = llista_boles[0]->capsa;
+    capsaAux.pmin = capsaAux.pmin;
+    puntMin = capsaAux.pmin = puntMax;
 
-        pmin.y = bolamin.y < pmin.y ? bolamin.y : pmin.y;
-        pmax.y = bolamax.y > pmax.y ? bolamax.y : pmax.y;
 
-        pmin.z = bolamin.z < pmin.z ? bolamin.z : pmin.z;
-        pmax.z = bolamax.z > pmax.z ? bolamax.z : pmax.z;
+    for (int i=0; i<QUANTITAT_BOLES; i++){
+        capsaAux = llista_boles[i]->capsa;
+        puntMin.x = puntMin.x > capsaAux.pmin.x? capsaAux.pmin.x: puntMin.x;
+        puntMax.x = puntMax.x < capsaAux.pmin.x? capsaAux.pmin.x: puntMax.x;
+        puntMin.y = puntMin.y > capsaAux.pmin.y? capsaAux.pmin.y: puntMin.y;
+        puntMax.y = puntMax.y < capsaAux.pmin.y? capsaAux.pmin.y: puntMax.y;
+        puntMin.z = puntMin.z > capsaAux.pmin.z? capsaAux.pmin.z: puntMin.z;
+        puntMax.z = puntMax.z < capsaAux.pmin.z? capsaAux.pmin.z: puntMax.z;
+        maxA = maxA < capsaAux.a? capsaAux.a: maxA;
+        maxH = maxH < capsaAux.h? capsaAux.h: maxH;
+        maxP = maxP < capsaAux.p? capsaAux.p: maxP;
     }
 
-    Capsa3D capsa;
-    capsa.a = fabs(pmax.x - pmin.x);
-    capsa.h = fabs(pmax.y - pmin.y);
-    capsa.p = fabs(pmax.z - pmin.z);
-    capsa.centre = pmin + vec3(capsa.a/2, capsa.h/2, capsa.p/2);
-    capsa.pmin = pmin;
+    capsa.a = fabs(puntMax.x - puntMin.x);
+    capsa.h = fabs(puntMax.y - puntMin.y);
+    capsa.p = fabs(puntMax.z - puntMin.z);
+    capsa.pmin = puntMin;
+    capsa.centre = capsa.pmin + vec3(capsa.a/2, capsa.h/2, capsa.p/2);
+
     return capsa;
 }
 

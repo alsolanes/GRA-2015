@@ -1,6 +1,7 @@
 #ifndef BOLA_H
 #define BOLA_H
 
+
 #include <objecte.h>
 
 class Bola : public Objecte
@@ -11,8 +12,9 @@ public:
     ~Bola();
 
 private:
-    //NumVertices sera: 4 cares del tetraedre* 12 vertex cada cara * 4**iteracions
     static const int NumVertices = 10000;
+
+    point4 vertices[4];
     color4 vertex_colors[4];
 
     void triangle( const point4& a, const point4& b, const point4& c );

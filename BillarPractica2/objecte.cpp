@@ -11,7 +11,7 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
     xorig = yorig = zorig = 0;
     xRot = yRot = zRot = 0;
 
-    Index=0;
+    Index = 0;
 }
 
 Objecte::Objecte(int npoints, QString n) : numPoints(npoints)
@@ -21,10 +21,7 @@ Objecte::Objecte(int npoints, QString n) : numPoints(npoints)
     vertexsTextura = new vec2[npoints];
     std::cout<<"Estic en el constructor parametritzat del objecte\n";
 
-    xRot = 0;
-    yRot = 0;
-    zRot = 0;
-
+    xRot = yRot = zRot = 0;
 
     Index = 0;
 
@@ -43,20 +40,17 @@ Objecte::~Objecte()
 }
 
 
-Capsa3D Objecte::calculCapsa3D()
-{
-
+Capsa3D Objecte::calculCapsa3D(){
     // Metode a implementar: calcula la capsa mínima contenidora d'un objecte
     int i;
-    vec3    pmin, pmax;
-    // Recorrerem tots els punts de l'objecte i ens quedarem amb els punts màxims i mínims de cada coordenada
+    vec3 pmin, pmax;
     point4 puntActual = points[0];
-    // Inicialitzem els punts
+    Capsa3D capsaRes;
     pmin.x = pmax.x = puntActual.x;
     pmin.y = pmax.y = puntActual.y;
     pmin.z = pmax.z = puntActual.z;
     for(i = 0; i<Index; i++){
-        puntActual = points[i];
+        puntActual = points[i]/points[i][3];
         pmin.x = pmin.x < puntActual.x ? pmin.x : puntActual.x;
         pmin.y = pmin.y < puntActual.y ? pmin.y : puntActual.y;
         pmin.z = pmin.z < puntActual.z ? pmin.z : puntActual.z;
@@ -64,13 +58,15 @@ Capsa3D Objecte::calculCapsa3D()
         pmax.y = pmax.y > puntActual.y ? pmax.y : puntActual.y;
         pmax.z = pmax.z > puntActual.z ? pmax.z : puntActual.z;
     }
-    capsa.a = fabs(pmax.x - pmin.x);
-    capsa.h = fabs(pmax.y - pmin.y);
-    capsa.p = fabs(pmax.z - pmin.z);
-    capsa.pmin = pmin;
-    capsa.centre = capsa.pmin + vec3(capsa.a/2, capsa.h/2, capsa.p/2);
-    return capsa;
+
+    capsaRes.a = fabs(pmax.x - pmin.x);
+    capsaRes.h = fabs(pmax.y - pmin.y);
+    capsaRes.p = fabs(pmax.z - pmin.z);
+    capsaRes.pmin = pmin;
+    capsaRes.centre = (pmin + pmax)/2.;
+    return capsaRes;
 }
+
 
 void Objecte::aplicaTG(mat4 m)
 {
@@ -94,19 +90,16 @@ void Objecte::aplicaTGPoints(mat4 m)
     transformed_points = &transformed_points[0];
     points = &points[0];
 
-    for ( int i = 0; i < Index; ++i )
-    {
+    for ( int i = 0; i < Index; ++i ) {
         points[i] = transformed_points[i];
     }
 
     delete transformed_points;
 
-    calculCapsa3D();
+    capsa = calculCapsa3D();
 }
 
-void Objecte::aplicaTGCentrat(mat4 m)
-{
-
+void Objecte::aplicaTGCentrat(mat4 m){
     // Metode a implementar
     //el desplacem a l'orígen
     mat4 ToOrigen = Translate(-capsa.centre.x, -capsa.centre.y, -capsa.centre.z);
@@ -118,20 +111,38 @@ void Objecte::aplicaTGCentrat(mat4 m)
     calculCapsa3D();
 }
 
+
+
 void Objecte::toGPU(QGLShaderProgram *pr){
+
     this->texture->bind(0);
     this->program = pr;
 
-    program->setUniformValue("texMap", 0);
-
     glGenBuffers( 1, &buffer );
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(color4) * Index + sizeof(vec2) * Index,
+    glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index * 2 /* vertexs + colors */ + sizeof(vec2) * Index,
                   NULL, GL_STATIC_DRAW );
 
-    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index, points );
-    glBufferSubData( GL_ARRAY_BUFFER, sizeof(color4) * Index, sizeof(color4)*Index, colors );
-    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index + sizeof(color4)*Index, sizeof(vec2)*Index, vertexsTextura );
+    program->link();
+    program->bind();
+
+    glEnable( GL_DEPTH_TEST );
+    glEnable(GL_TEXTURE_2D);
+}
+
+// Pintat en la GPU.
+void Objecte::draw()
+{
+    this->texture->bind(0);
+    program->setUniformValue("texMap", 0);
+
+    // cal activar el buffer de l'objecte. Potser que ja n'hi hagi un altre actiu
+    glBindBuffer( GL_ARRAY_BUFFER, buffer );
+
+    // per si han canviat les coordenades dels punts
+    glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index, &points[0] );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4) * Index, sizeof(color4) * Index, &colors[0] );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index+sizeof(color4)*Index, sizeof(vec2)*Index, vertexsTextura );
 
     int vertexLocation = program->attributeLocation("vPosition");
     int colorLocation = program->attributeLocation("vColor");
@@ -144,29 +155,11 @@ void Objecte::toGPU(QGLShaderProgram *pr){
     program->setAttributeBuffer("vColor", GL_FLOAT, sizeof(point4) * Index, 4);
 
     program->enableAttributeArray(coordTextureLocation);
-    program->setAttributeBuffer("vCoordTexture", GL_FLOAT, sizeof(point4) * Index + sizeof(color4) * Index, 2);
+    program->setAttributeBuffer("vCoordTexture", GL_FLOAT, sizeof(point4)*Index+sizeof(color4)*Index, 2);
 
-    program->bindAttributeLocation("vPosition",vertexLocation);
-    program->bindAttributeLocation("vColor", colorLocation);
-    program->bindAttributeLocation("vCoordTexture", coordTextureLocation);
-
-    glEnable( GL_DEPTH_TEST );
-    glEnable(GL_TEXTURE_2D);
-
-    program->link();
-    program->bind();
-
-}
-
-// Pintat en la GPU.
-void Objecte::draw()
-{
-
-    // cal activar el buffer de l'objecte. Potser que ja n'hi hagi un altre actiu
-    glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+    glPolygonMode(GL_FRONT_AND_BACK,
+                  GL_FILL);
     glDrawArrays( GL_TRIANGLES, 0, Index );
-
-
 }
 
 void Objecte::make()
@@ -335,4 +328,3 @@ void Objecte::init_textura()
      texture->bind(0);
      //qDebug() << "Objecte::FI init_textura" << endl;
  }
-

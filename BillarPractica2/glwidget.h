@@ -6,6 +6,7 @@
 
 #include <QtWidgets>
 #include <QGLWidget>
+#include <QtOpenGL>
 #include <QTime>
 
 
@@ -22,14 +23,14 @@ public:
     GLWidget(QWidget *parent = 0);
     ~GLWidget();
 
-    bool cameraActual; //per gestionar la camera general o en 1era p.
-
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
-
     void setXRotation(int angle);
     void setYRotation(int angle);
     void setZRotation(int angle);
+    //metodes p2 per fer panning i zoom
+    void pan(int dx, int dy);
+    void zoom(int positiu);
 
 public slots:
     void newPlaBase();
@@ -37,7 +38,7 @@ public slots:
     void newBola();
     void newConjuntBoles();
     void newSalaBillar();
-
+    void newTaulaBillar();
     // Metode per iniciar la dinàmica del joc
     void Play();
 
@@ -65,6 +66,7 @@ private:
     QColor qtPurple;
 
     bool moviment;
+    bool cameraActual; //cert quan s'ha de modificar la càmera general, fals quan s'ha de modificar la 1P
 
     // Programa de la GPU
     QGLShaderProgram *program;
@@ -77,14 +79,8 @@ private:
    // Metode per inicialitzar els shaders de l'aplicacio
     void initShadersGPU();
 
-
-
     // Metode que carrega un nou objecte a l'escena
     void newObjecte(Objecte * obj);
-
-    // Metode per adaptar l'escena al tamany del widget
-    void adaptaObjecteTamanyWidget(Objecte *obj);
-    bool isMovePossible(double x, double y);
 
 };
 

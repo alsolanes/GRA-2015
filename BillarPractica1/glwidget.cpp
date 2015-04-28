@@ -12,7 +12,9 @@ GLWidget::GLWidget(QWidget *parent)
 
 {
     setFocusPolicy( Qt::StrongFocus );
-    esc = new Escena();
+    this->cameraActual = true;
+    //passarem al constructor d'escena la mida del viewport
+    esc = new Escena(this->size().width(),this->size().height());
 
     xRot = 0;
     yRot = 0;
@@ -134,22 +136,19 @@ void GLWidget::initializeGL()
     glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), clearColor.alphaF());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    if(cameraActual){
+        esc->camGeneral->toGPU(program);
+    }
+    else{}
+
 }
 
 void GLWidget::paintGL()
 {
    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-   qNormalizeAngle(xRot);
-   qNormalizeAngle(yRot);
-   qNormalizeAngle(zRot);
-
-   mat4 transform = ( RotateX( xRot / 16.0 ) *
-                       RotateY( yRot / 16.0 ) *
-                       RotateZ( zRot / 16.0 ) );
-
-   // A modificar si cal girar tots els objectes
-   esc->aplicaTGCentrat(transform);
-   esc->draw();
+   if(cameraActual)
+       esc->camGeneral->CalculaMatriuModelView();
+   else{}
 }
 
 
@@ -285,12 +284,9 @@ void GLWidget::newConjuntBoles()
     ConjuntBoles *conjunt_boles;
 
     conjunt_boles = new ConjuntBoles();
-    for (int i=0; i<15; i++) {
-            adaptaObjecteTamanyWidget(conjunt_boles->llista_boles[i]);
 
-    }
     conjunt_boles->toGPU(program);
-    esc->addConjuntBoles(conjunt_boles);
+    esc->addObjecte(conjunt_boles);
 
     updateGL();
 }

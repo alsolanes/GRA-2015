@@ -4,18 +4,18 @@
 Camera::Camera()
 {
     vs.vrp = vec4(0.0, 0.0, 0.0, 1.0);
-    vs.vup = vec4(0.0, 1.0, 0.0, 0.0);
-    vs.obs = vec4(0.0, 0.0, 200.0, 1.0);
+    vs.vup = vec4(0.0, 1.0, 0.0, 1.0);
+    vs.obs = vec4(0.0, 20.0, 0.0, 1.0);
 
     vs.angx = 0;
     vs.angy = 0;
     vs.angz = 0;
 
-    vp.a = 600;
-    vp.h = 600;
-    vp.pmin[0] = 0;
-    vp.pmin[1] = 0;
-
+//    vp.a = 600;
+//    vp.h = 600;
+//    vp.pmin[0] = 0;
+//    vp.pmin[1] = 0;
+    setViewport(0,0,600,600);
     piram.proj = PARALLELA;
     piram.d = 100;
 }
@@ -26,11 +26,12 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
     // CAL IMPLEMENTAR
     // CODI A MODIFICAR DURANT LA PRACTICA 2
     
-    vs.vrp[0] = capsaMinima.a;
-    vs.vrp[1] = capsaMinima.h;
-    vs.vrp[2] = capsaMinima.p;
+    // implementem vrp
+    vs.vrp[0] = capsaMinima.pmin.x + capsaMinima.a/2;
+    vs.vrp[1] = capsaMinima.pmin.y + capsaMinima.h/2;
+    vs.vrp[2] = capsaMinima.pmin.z + capsaMinima.p/2;
     
-   
+    // implementem viewport
     vp.a = a;
     vp.h = h;
     vp.pmin[0] = 0;
@@ -42,11 +43,11 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
 
 void Camera::toGPU(QGLShaderProgram *program)
 {
-    projection = program->uniformLocation("projection");
-    glUniformMatrix4fv( projection, 1, GL_TRUE, proj );
-    model_view = program->uniformLocation("model_view");
-    glUniformMatrix4fv( model_view, 1, GL_TRUE, modView );
+    CalculaMatriuModelView();
+    setModelViewToGPU(program, modView);
 
+    CalculaMatriuProjection();
+    setProjectionToGPU(program, proj);
 }
 
 
@@ -57,34 +58,45 @@ void Camera::toGPU(QGLShaderProgram *program)
 void Camera::CalculaMatriuModelView()
 {
     // CODI A MODIFICAR DURANT LA PRACTICA 2
-
-    modView = Ortho( -1, 1, -1, 1, 1, -1 );
-
-    //modView = identity();
+    vec4 eye = vs.obs;
+    vec4 at = vs.vrp;
+    vec4 up = vs.vup;
+    modView = LookAt(eye,at,up);
 }
 
 void Camera::CalculaMatriuProjection()
 {
     // CODI A MODIFICAR DURANT LA PRACTICA 2
-
-    proj = Ortho( -1, 1, -1, 1, 1, -1 );
-
-    proj = identity();
-
+    if(piram.proj == PARALLELA)
+        proj = Ortho(wd.pmin.x, wd.pmin.x + wd.a, wd.pmin.y, wd.pmin.y + wd.h, piram.dant, piram.dpost);
+    else if(piram.proj == PERSPECTIVA)
+        proj = Frustum(wd.pmin.x, wd.pmin.x + wd.a, wd.pmin.y, wd.pmin.y + wd.h, piram.dant, piram.dpost);
 }
 
 
 void Camera::CalculWindow( Capsa3D c)
 {
    // CODI A MODIFICAR DURANT LA PRACTICA 2
+    vec4 vertex[8];
+    vec2 pMin, pMax;
+
+    VertexCapsa3D(c, vertex);
+
+    for(int i = 0; i<8; i++){
+        pMin.x = vertex[i].x < pMin.x ? vertex[i].x:pMin.x;
+        pMax.x = vertex[i].x > pMax.x ? vertex[i].x:pMax.x;
+
+        pMin.y = vertex[i].y < pMin.y ? vertex[i].y:pMin.y;
+        pMax.y = vertex[i].y > pMax.y ? vertex[i].y:pMax.y;
+    }
+
+    wd.pmin.x = pMin.x;
+    wd.pmin.y = pMin.y;
     
-    wd.pmin.x = -1;
-    wd.pmin.y = -1;
+    wd.a = fabs(pMax.x - pMin.x);
+    wd.h = fabs(pMax.y - pMin.y);
     
-    wd.a = 2;
-    wd.h = 2;
-    
-    
+    AjustaAspectRatioWd();
 }
 
 void Camera::setViewport(int x, int y, int a, int h)
@@ -99,7 +111,7 @@ void Camera::setModelViewToGPU(QGLShaderProgram *program, mat4 m)
 {
 
     model_view = program->uniformLocation("model_view");
-    glUniformMatrix4fv( model_view, 1, GL_TRUE, modView );
+    glUniformMatrix4fv( model_view, 1, GL_TRUE, m );
 
 }
 
@@ -107,7 +119,7 @@ void Camera::setProjectionToGPU(QGLShaderProgram *program, mat4 p)
 {
  
     projection = program->uniformLocation("projection");
-    glUniformMatrix4fv( projection, 1, GL_TRUE, proj );
+    glUniformMatrix4fv( projection, 1, GL_TRUE, p );
 }
 
 void  Camera::AmpliaWindow(double r)

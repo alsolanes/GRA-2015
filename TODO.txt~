@@ -1,6 +1,6 @@
 CORRECCIONS P1
-- AplicaTGCentrat malament: fer en un pack fent servir calcula capsa minima - WIP
-- Capsa3D a escena - DONE
+- AplicaTGCentrat malament: fer en un pack fent servir calcula capsa minima
+- Capsa3D a escena - WIP
 - Conjunt boles ha d'heredar d'objecte
 - AplicaTGCentrat de conjuntboles: fer de totes les boles, no una a una
 - Adapta objecte tamany widget malament: no ho farem servir tot i així
