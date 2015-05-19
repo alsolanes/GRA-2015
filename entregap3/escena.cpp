@@ -2,19 +2,18 @@
 
 Escena::Escena(int vpa, int vph)
 {
-    //std::cout<<"Escena::Escena"<<std::endl;
     capsaMinima.pmin[0] = 0.0; capsaMinima.pmin[1] = 0.0; capsaMinima.pmin[2]=0.0;
     capsaMinima.a = 1; capsaMinima.h = 1; capsaMinima.p = 1;
 
     taulaBillar = NULL;
     plaBase = NULL;
-    bolaBlanca = NULL;
+    bola = NULL;
     conjuntBoles = NULL;
 
-    iniCamera(true, vpa, vph);//crea la camera general. a y h del vp obtenidos en glWidget
+    iniCamera(true, vpa, vph);
 
-    AmbientLight = vec4(0.4, 0.4, 0.4, 1.0);
-    conjuntLlums = new ConjuntLlums(); //incluye la primera luz y 2 mas
+    llumAmbient = vec4(0.4, 0.4, 0.4, 1.0);
+    conjuntLlums = new ConjuntLlums();
 
 }
 
@@ -24,8 +23,8 @@ Escena::~Escena()
        delete this->taulaBillar;
     if (plaBase!=NULL)
        delete this->plaBase;
-    if (bolaBlanca!=NULL)
-       delete this->bolaBlanca;
+    if (bola!=NULL)
+       delete this->bola;
     if (conjuntBoles!=NULL)
        delete this->conjuntBoles;
 }
@@ -63,7 +62,7 @@ void Escena::setAnglesCamera(bool camGen, float angX, float angY, float angZ){
     }
 }
 
-void Escena::setVRPCamera(bool camGen, point4 vrp){//suponiendo que el obs no cambia
+void Escena::setVRPCamera(bool camGen, point4 vrp){
     if(camGen == true){
          camGeneral.vs.vrp = vrp;
          camGeneral.vs.angx = 180.0 /M_PI * atan2(vrp.y-camGeneral.vs.obs.y, vrp.z-camGeneral.vs.obs.z);
@@ -80,7 +79,7 @@ void Escena::setWindowCamera(bool camGen, bool retallat, Capsa2D window){
             camGeneral.wd = window;
             camGeneral.CalculWindowAmbRetallat();
         }
-        camGeneral.AjustaAspectRatioWd();//amplia el window per tal que el seu aspect ratio sigui igual al del viewport
+        camGeneral.AjustaAspectRatioWd();
         camGeneral.CalculaMatriuProjection();
     }else{
     }
@@ -98,16 +97,16 @@ void Escena::setDCamera(bool camGen, float d){
 void Escena::addObjecte(Objecte *obj) {
     if (dynamic_cast<TaulaBillar*>(obj)){
         this->taulaBillar = (TaulaBillar*)obj;
-        listaObjectes.push_back(taulaBillar);
+        llista_objectes.push_back(taulaBillar);
     } else if (dynamic_cast<PlaBase*>(obj)){
         this->plaBase = (PlaBase*)obj;
-        listaObjectes.push_back(plaBase);
+        llista_objectes.push_back(plaBase);
     }else if (dynamic_cast<Bola*>(obj)){
-        this->bolaBlanca= (Bola*)obj;
-        listaObjectes.push_back(bolaBlanca);
+        this->bola= (Bola*)obj;
+        llista_objectes.push_back(bola);
     }else if(dynamic_cast<ConjuntBoles*>(obj) && conjuntBoles ==NULL){
         this->conjuntBoles = (ConjuntBoles*)obj;
-        listaObjectes.push_back(conjuntBoles);
+        llista_objectes.push_back(conjuntBoles);
     }
     CapsaMinCont3DEscena();
 }
@@ -126,8 +125,8 @@ void Escena::CapsaMinCont3DEscena()
     pmax[1] = -INFINITY;
     pmax[2] = -INFINITY;
 
-    for (int i=0; i<listaObjectes.size(); i++) {
-        capsaAux = listaObjectes[i]->calculCapsa3D();
+    for (int i=0; i<llista_objectes.size(); i++) {
+        capsaAux = llista_objectes[i]->calculCapsa3D();
 
         if (capsaMinima.pmin[0]>capsaAux.pmin[0])
             capsaMinima.pmin[0] = capsaAux.pmin[0];
@@ -151,7 +150,7 @@ void Escena::CapsaMinCont3DEscena()
 void Escena::aplicaTG(mat4 m) {
 
     for(unsigned int i=0;i<QUANTITAT_BOLES;i++)
-        listaObjectes[i]->aplicaTG(m);
+        llista_objectes[i]->aplicaTG(m);
 
 }
 
@@ -165,7 +164,7 @@ void Escena::aplicaTGCentrat(mat4 m) {
     mat4 mRes = T1*m*T2;
     //apliquem la transformacio a tots els objectes
     for(unsigned int i = 0; i < QUANTITAT_BOLES; i++)
-        listaObjectes[i]->aplicaTGCentrat(mRes);
+        llista_objectes[i]->aplicaTGCentrat(mRes);
     //recalculem la capsa
     CapsaMinCont3DEscena();
 }
@@ -173,7 +172,7 @@ void Escena::aplicaTGCentrat(mat4 m) {
 
 
 void Escena::move(bool cameraGeneral, int dir){
-    Capsa3D capsaBola = bolaBlanca->capsa;
+    Capsa3D capsaBola = bola->capsa;
     vec3 vecMoviment, posicioFinal;
     switch (dir)
     {
@@ -207,7 +206,7 @@ void Escena::move(bool cameraGeneral, int dir){
     vecMoviment *= VELOCITAT;
     posicioFinal = capsaBola.centre + vecMoviment;
     if (canMove(capsaBola,posicioFinal) && isOnPlaBase(posicioFinal))
-        bolaBlanca->aplicaTG(Translate(vecMoviment.x, 0, vecMoviment.z));
+        bola->aplicaTG(Translate(vecMoviment.x, 0, vecMoviment.z));
 }
 
 /*
@@ -239,7 +238,7 @@ bool Escena::canMove(Capsa3D capsa, vec3 posicio){
 
 
 bool Escena::isOnPlaBase(vec3 pos){
-    float radi = bolaBlanca->capsa.a/2;
+    float radi = bola->capsa.a/2;
     Capsa3D c;
     vec3 up = plaBase->vectorVertical(), right = plaBase->vectorHoritzontal();
     vec3 pos2 = (pos - normalize(cross(up, right))*radi);
@@ -286,9 +285,9 @@ void Escena::draw(bool cameraActual) {
         plaBase->draw();
     }
 
-    if (bolaBlanca!=NULL){
-        bolaBlanca->texture->bind(0);
-        bolaBlanca->toGPU(pr);
+    if (bola!=NULL){
+        bola->texture->bind(0);
+        bola->toGPU(pr);
 
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
@@ -296,7 +295,7 @@ void Escena::draw(bool cameraActual) {
         setLlumiTexturaToGPU(pr, teTextura);
 
         camGeneral.toGPU(pr);
-        bolaBlanca->draw();
+        bola->draw();
     }
 
     if (conjuntBoles!=NULL){
@@ -318,7 +317,7 @@ void Escena::draw(bool cameraActual) {
 
 void Escena::setAmbientToGPU(QGLShaderProgram *program){
     GLuint LuzAmbLocation = program->uniformLocation("llumAmbient");
-    glUniform4fv(LuzAmbLocation, 1, AmbientLight);
+    glUniform4fv(LuzAmbLocation, 1, llumAmbient);
 }
 
 void Escena::setLlumiTexturaToGPU(QGLShaderProgram *program, bool conText)

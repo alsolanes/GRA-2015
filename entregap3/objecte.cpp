@@ -121,20 +121,16 @@ void Objecte::toGPU(QGLShaderProgram *pr){
 
     program->setUniformValue("texMap", 0);
 
-    // Creacio i inicialitzacio d'un vertex buffer object (VBO)
     glGenBuffers( 1, &buffer );
 
-    // Activació a GL del Vertex Buffer Object
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 
-    // Transferència dels punts, normals i coordenades de textura al vertex buffer object
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4) * Index + sizeof(vec3) * Index + sizeof(vec2) * Index, NULL, GL_STATIC_DRAW );
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4) * Index, &points[0] );
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4) * Index, sizeof(vec3) * Index, &normal[0] );
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index+sizeof(vec3)*Index, sizeof(vec2)*Index, vertexsTextura);
 
-    // Definició de la correspondència de les variables del shader vPosition, vNormal i vCoordTexture
     int vertexLocation = program->attributeLocation("vPosition");
     int normalLocation = program->attributeLocation("vNormal");
     int coordTextureLocation = program->attributeLocation("vCoordTexture");

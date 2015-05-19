@@ -48,16 +48,18 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-OTHER_FILES += \
-    vshaderFlatGouraud.glsl \
-    fshaderFlatGouraud.glsl \
-    vshaderPhong.glsl \
-    fshaderPhong.glsl \
-    vshaderToon.glsl \
-    fshaderToon.glsl
+OTHER_FILES +=
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    fragmentFlatGouraud.glsl \
+    fragmentPhong.glsl \
+    fragmentToon.glsl \
+    vertexFlatGouraud.glsl \
+    vertexPhong.glsl \
+    vertexToon.glsl
 
 
 

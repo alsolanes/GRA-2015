@@ -47,7 +47,6 @@ public:
     void setVRPCamera(bool camGeneral, point4 vrp);
     void setWindowCamera(bool camGeneral, bool retallat, Capsa2D window);
     void setDCamera(bool camGeneral, float d);
-    void cam2GPU(bool cameraActual);
     void computeCollisions(Capsa3D cb, Capsa3D cT, vec3 ctrB, vector<Capsa3D> listaCapsasConjuntBoles, QKeyEvent *event);
     void setAmbientToGPU(QGLShaderProgram *program);
     void setLlumiTexturaToGPU(QGLShaderProgram *program, bool teTextura);
@@ -62,17 +61,17 @@ public:
 
     TaulaBillar *taulaBillar;
     PlaBase *plaBase;
-    Bola *bolaBlanca = NULL;
+    Bola *bola = NULL;
     ConjuntBoles *conjuntBoles;
     Camera camGeneral;
-    Camera camFirstP;
-    vector<Objecte*> listaObjectes;
+    Camera camPrimeraP;
+    vector<Objecte*> llista_objectes;
     double dzP = 0.01;
     double dzN = -0.01;
     double dxP = 0.01;
     double dxN = -0.01;
 
-    vec4 AmbientLight;
+    vec4 llumAmbient;
     ConjuntLlums *conjuntLlums;
     bool teTextura = true;
 

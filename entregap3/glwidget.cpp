@@ -47,20 +47,20 @@ GLWidget::InitShaderGPU()
 //    QGLShader *vshader = new QGLShader(QGLShader::Vertex, this);
 //    QGLShader *fshader = new QGLShader(QGLShader::Fragment, this);
 
-    vshaderFlatGouraud = new QGLShader(QGLShader::Vertex, this);
-    fshaderFlatGouraud = new QGLShader(QGLShader::Fragment, this);
-    vshaderFlatGouraud->compileSourceFile("://vshaderFlatGouraud.glsl");
-    fshaderFlatGouraud->compileSourceFile("://fshaderFlatGouraud.glsl");
+    vertexFlatGouraud = new QGLShader(QGLShader::Vertex, this);
+    fragmentFlatGouraud = new QGLShader(QGLShader::Fragment, this);
+    vertexFlatGouraud->compileSourceFile("://vertexFlatGouraud.glsl");
+    fragmentFlatGouraud->compileSourceFile("://fragmentFlatGouraud.glsl");
 
-    vshaderPhong = new QGLShader(QGLShader::Vertex, this);
-    fshaderPhong = new QGLShader(QGLShader::Fragment, this);
-    vshaderPhong->compileSourceFile("://vshaderPhong.glsl");
-    fshaderPhong->compileSourceFile("://fshaderPhong.glsl");
+    vertexPhong = new QGLShader(QGLShader::Vertex, this);
+    fragmentPhong = new QGLShader(QGLShader::Fragment, this);
+    vertexPhong->compileSourceFile("://vertexPhong.glsl");
+    fragmentPhong->compileSourceFile("://fragmentPhong.glsl");
 
-    vshaderToon = new QGLShader(QGLShader::Vertex, this);
-    fshaderToon = new QGLShader(QGLShader::Fragment, this);
-    vshaderToon->compileSourceFile("://vshaderToon.glsl");
-    fshaderToon->compileSourceFile("://fshaderToon.glsl");
+    vertexToon = new QGLShader(QGLShader::Vertex, this);
+    fragmentToon = new QGLShader(QGLShader::Fragment, this);
+    vertexToon->compileSourceFile("://vertexToon.glsl");
+    fragmentToon->compileSourceFile("://fragmentToon.glsl");
 
     program = new QGLShaderProgram(this);
 
@@ -87,18 +87,18 @@ GLWidget::InitShaderGPU()
 
 void GLWidget::initFlatGouraud(){
 
-    program->addShader(vshaderFlatGouraud);
-    program->addShader(fshaderFlatGouraud);
+    program->addShader(vertexFlatGouraud);
+    program->addShader(fragmentFlatGouraud);
 }
 void GLWidget::initPhong(){
 
-    program->addShader(vshaderPhong);
-    program->addShader(fshaderPhong);
+    program->addShader(vertexPhong);
+    program->addShader(fragmentPhong);
 }
 void GLWidget::initToon(){
 
-    program->addShader(vshaderToon);
-    program->addShader(fshaderToon);
+    program->addShader(vertexToon);
+    program->addShader(fragmentToon);
 }
 
 
@@ -127,7 +127,7 @@ void GLWidget::setXRotation(int angle)
 {
     Camera camActual;
     if(cameraActual) camActual = esc->camGeneral;
-    else camActual = esc->camFirstP;
+    else camActual = esc->camPrimeraP;
     qNormalizeAngle(angle);
     xRot += camActual.vs.angx;
     if (angle != xRot) {
@@ -141,7 +141,7 @@ void GLWidget::setYRotation(int angle)
 {
     Camera camActual;
     if(cameraActual) camActual = esc->camGeneral;
-    else camActual = esc->camFirstP;
+    else camActual = esc->camPrimeraP;
     qNormalizeAngle(angle);
     yRot += camActual.vs.angy;
     if (angle != yRot) {
@@ -155,7 +155,7 @@ void GLWidget::setZRotation(int angle)
 {
     Camera camActual;
     if(cameraActual) camActual = esc->camGeneral;
-    else camActual = esc->camFirstP;
+    else camActual = esc->camPrimeraP;
     qNormalizeAngle(angle);
     yRot += camActual.vs.angy;
     if (angle != yRot) {
@@ -257,9 +257,6 @@ void GLWidget::changeShader(QString newShader){
 
 void GLWidget::keyPressEvent(QKeyEvent *event)
 {
-    mat4 m;
-    double angx;
-
    switch ( event->key() )
    {
    case Qt::Key_1:
@@ -326,10 +323,6 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
        break;
    }
 
-   if (esc->bolaBlanca!=NULL){
-      esc->bolaBlanca->aplicaTG(m);
-   }
-
    updateGL();
 }
 
@@ -360,7 +353,6 @@ void GLWidget::newObjecte(Objecte * obj)
     esc->setVRPCamera(cameraActual, vrp);
     if(cameraActual == true){
         esc->camGeneral.CalculWindow(esc->capsaMinima);
-        esc->camGeneral.AmpliaWindow(-0.1);
         esc->camGeneral.CalculaMatriuProjection();
     }else{
     }
@@ -400,8 +392,8 @@ void GLWidget::newConjuntBoles()
 
     esc->conjuntBoles = conjuntboles;
     for(int i=0; i<QUANTITAT_BOLES; i++){
-        esc->listaObjectes.push_back(conjuntboles->llista_boles[i]);
-        listaCapsasConjuntBoles.push_back(conjuntboles->llista_boles[i]->calculCapsa3D());
+        esc->llista_objectes.push_back(conjuntboles->llista_boles[i]);
+        capses.push_back(conjuntboles->llista_boles[i]->calculCapsa3D());
     }
 
     esc->CapsaMinCont3DEscena();
@@ -409,7 +401,6 @@ void GLWidget::newConjuntBoles()
     esc->setVRPCamera(cameraActual, vrp);
     if(cameraActual == true){
         esc->camGeneral.CalculWindow(esc->capsaMinima);
-        esc->camGeneral.AmpliaWindow(-0.1);
         esc->camGeneral.CalculaMatriuProjection();
     }else{
     }
@@ -422,16 +413,15 @@ void GLWidget::newConjuntBoles()
     {
         PlaBase *plaBase = new PlaBase();
         esc->addObjecte(plaBase);
-        cT = plaBase->calculCapsa3D();//para el calculo de colisiones
 
-        Bola *bolab = new Bola(0.0, 0.03075, 0.5,shaderActual);
+        Bola *bolab = new Bola(0.0, 0.03, 0.5,shaderActual);
         esc->addObjecte(bolab);
 
         ConjuntBoles *conjuntboles = new ConjuntBoles(shaderActual);
         esc->conjuntBoles = conjuntboles;
         for(int i=0; i<QUANTITAT_BOLES; i++){
-            esc->listaObjectes.push_back(conjuntboles->llista_boles[i]);
-            listaCapsasConjuntBoles.push_back(conjuntboles->llista_boles[i]->calculCapsa3D());
+            esc->llista_objectes.push_back(conjuntboles->llista_boles[i]);
+            capses.push_back(conjuntboles->llista_boles[i]->calculCapsa3D());
         }
 
         esc->CapsaMinCont3DEscena();
@@ -441,7 +431,6 @@ void GLWidget::newConjuntBoles()
         esc->setVRPCamera(cameraActual, vrp);
 
         esc->camGeneral.CalculWindow(esc->capsaMinima);
-        esc->camGeneral.AmpliaWindow(-0.1);
         esc->camGeneral.CalculaMatriuProjection();
 
         updateGL();

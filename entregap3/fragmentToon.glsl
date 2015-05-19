@@ -28,16 +28,16 @@ uniform bool teTextura;
 
 void main()
 {
-    float intensity;
+    float intensitatLlum;
     vec4 color;
 
-    intensity = dot(normalize(llum1.gpuPosicioLlum.xyz), Normal);
+    intensitatLlum = dot(normalize(llum1.gpuPosicioLlum.xyz), Normal);
 
-    if (intensity > 0.9)
+    if (intensitatLlum > 0.9)
         color = vec4(0.8, 1.0, 0.8, 1.0);
-    else if (intensity > 0.6 && intensity <= 0.9)
+    else if (intensitatLlum > 0.6 && intensitatLlum <= 0.9)
         color = vec4(0.6, 0.7, 0.6, 1.0);
-    else if (intensity > 0.3 && intensity <= 0.6)
+    else if (intensitatLlum > 0.3 && intensitatLlum <= 0.6)
         color = vec4(0.2, 0.5, 0.4, 1.0);
     else
         color = vec4(0.1, 0.3, 0.1, 1.0);

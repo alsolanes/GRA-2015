@@ -11,14 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowTitle(tr("Billar Practica 1: GiVD 2014-2015"));
+    setWindowTitle(tr("Billar Practica 3: GiVD 2014-2015 :: Jaume & Aleix"));
     resize(640, 640);
 
 
     glWidget = new GLWidget;
     setCentralWidget(glWidget);
 
-    //conecto las distintas opciones de menú con sus metodes
     connect(this->ui->action_Play, SIGNAL(triggered()), glWidget, SLOT(Play()));
 
     connect(this->ui->action_Pla_Base, SIGNAL(triggered()), glWidget, SLOT(newPlaBase()));
@@ -26,8 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this->ui->action_15_Boles, SIGNAL(triggered()), glWidget, SLOT(newConjuntBoles()));
     connect(this->ui->action_Obre_Fitxer, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(this->ui->action_Sala_de_Billar, SIGNAL(triggered()), glWidget, SLOT(newSalaBillar()));
-    //connect(this->ui->action_Sala_de_Billar, SIGNAL(triggered()), glWidget, SLOT(Play()));
-
     connect(this->ui->action_Exit, SIGNAL(triggered()), this, SLOT(Quit()));
 }
 MainWindow::~MainWindow()

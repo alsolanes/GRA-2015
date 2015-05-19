@@ -1,11 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>vshaderFlatGouraud.glsl</file>
-        <file>fshaderFlatGouraud.glsl</file>
-        <file>vshaderPhong.glsl</file>
-        <file>fshaderPhong.glsl</file>
-        <file>vshaderToon.glsl</file>
-        <file>fshaderToon.glsl</file>
         <file>resources/Bola0.jpg</file>
         <file>resources/Bola1.jpg</file>
         <file>resources/Bola2.jpg</file>
@@ -27,5 +21,11 @@
         <file>resources/pal.obj</file>
         <file>resources/taula.mtl</file>
         <file>resources/taula.obj</file>
+        <file>vertexToon.glsl</file>
+        <file>fragmentToon.glsl</file>
+        <file>fragmentPhong.glsl</file>
+        <file>vertexFlatGouraud.glsl</file>
+        <file>vertexPhong.glsl</file>
+        <file>fragmentFlatGouraud.glsl</file>
     </qresource>
 </RCC>

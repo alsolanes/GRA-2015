@@ -2,21 +2,17 @@
 
 Bola::Bola(double x, double y, double z, QString tipoShading) : Objecte(NumVertices)//constructor de la bola blanca
 {
-    vec4 componentAmbient = vec4(0.25, 0.20725, 0.20725, 1);
-    vec4 componentDifusa = vec4(1.0, 0.829, 0.829, 1);
-    vec4 componentEspecular = vec4(0.296648, 0.296648, 0.296648, 1);
-    float coeficient_reflex_especular = 0.088*128;
-
-    mat = new Material(componentAmbient, componentDifusa, componentEspecular, coeficient_reflex_especular);
     this->nomShading = tipoShading;
+    vec4 componentAmbient = vec4(0.35, 0.3, 0.15, 1);
+    vec4 componentDifusa = vec4(1.0, 0.8, 0.7, 1);
+    vec4 componentEspecular = vec4(0.3, 0.4, 0.4, 1);
+    float coeficient_reflex_especular = 0.1*100;
+    mat = new Material(componentAmbient, componentDifusa, componentEspecular, coeficient_reflex_especular);
 
-    xorig = 0;
-    yorig = 0;
-    zorig = 0;
 
-    xRot = 0;
-    yRot = 0;
-    zRot = 0;
+    xorig = yorig = zorig = 0;
+
+    xRot = yRot = zRot = 0;
 
     vertexsTextura = new vec2[NumVertices];
     this->texture_path = "://resources/Bola0.jpg";
@@ -29,22 +25,16 @@ Bola::Bola(double x, double y, double z, QString tipoShading) : Objecte(NumVerti
 
 Bola::Bola(double x, double y, double z, const QString &texturePath, QString tipoShading) : Objecte(NumVertices)
 {
-    vec4 ka = vec4(0.25, 0.20725, 0.20725, 1); // component ambient
-    vec4 kd = vec4(1.0, 0.829, 0.829, 1); // component difus
-    vec4 ke = vec4(0.296648, 0.296648, 0.296648, 1); // component especular
-    float kre = 0.088*128; //coeficient reflexió especular
-
-    mat = new Material(ka, kd, ke, kre);
     this->nomShading = tipoShading;
+    vec4 componentAmbient = vec4(0.35, 0.3, 0.15, 1);
+    vec4 componentDifusa = vec4(1.0, 0.8, 0.829, 1);
+    vec4 componentEspecular = vec4(0.296648, 0.4, 0.4, 1);
+    float coeficient_reflex_especular = 0.1*128;
+    mat = new Material(componentAmbient, componentDifusa, componentEspecular, coeficient_reflex_especular);
 
+    xorig = yorig = zorig = 0;
 
-    xorig = 0;
-    yorig = 0;
-    zorig = 0;
-
-    xRot = 0;
-    yRot = 0;
-    zRot = 0;
+    xRot = yRot = zRot = 0;
 
     vertexsTextura = new vec2[NumVertices];
     this->texture_path = texturePath;

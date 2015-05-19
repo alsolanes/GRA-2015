@@ -2,14 +2,12 @@
 
 Camera::Camera()
 {
-    //std::cout<<"Camera::Camera"<<std::endl;
     vs.vrp = vec4(0.0, 0.0, 0.0, 1.0);
     vs.vup = vec4(0.0, 1.0, 0.0, 0.0);
     vs.obs = vec4(0.0, 20.0, 0.0, 1.0);
 
-    vs.angx = 0.0;
-    vs.angy = 0.0;
-    vs.angz = 0.0;//con los 3 angulos a cero vup apunta a (0,1,0)
+    vs.angx = 0.0; vs.angy = 0.0; vs.angz = 0.0;
+
 
     setViewport(0, 0, 600, 600);
 
@@ -19,9 +17,7 @@ Camera::Camera()
 
 void Camera::ini(int a, int h, Capsa3D capsaMinima)
 {
-    vs.vrp[0] = capsaMinima.pmin.x + capsaMinima.a/2;
-    vs.vrp[1] = capsaMinima.pmin.y + capsaMinima.h/2;
-    vs.vrp[2] = capsaMinima.pmin.z + capsaMinima.p/2;
+    vs.vrp = capsaMinima.centre;
 
     vp.a = a;
     vp.h = h;
@@ -30,22 +26,20 @@ void Camera::ini(int a, int h, Capsa3D capsaMinima)
 
 }
 
-// Suposa que les dades d'obs, vrp i vup son correctes en la camera
-// angx, angy, angles de gir del sistema de coords obser
+
 void Camera::CalculaMatriuModelView()
 {
     modView = identity();
 
-    vec4 eye = vs.obs; //se supone correcto
-    vec4 at = vs.vrp;  //se supone correcto
-    vec4 up = vs.vup;  //se supone correcto
+    vec4 eye = vs.obs;
+    vec4 at = vs.vrp;
+    vec4 up = vs.vup;
 
     this->modView = LookAt(eye, at, up);
 }
 
 void Camera::CalculaMatriuProjection()
 {
-    //se suopne que wd, dant y dpost son correctos
     proj = identity();
 
     if(piram.proj == PARALLELA){
@@ -63,14 +57,13 @@ void Camera::CalculWindow( Capsa3D c)
     mat4 MDP;
     vec4  vaux[8], vauxMod[8];
 
-    //modView = LookAt(vs.obs, vs.vrp, vs.vup);
 
     if (piram.proj==PERSPECTIVA) {
         CreaMatDp(MDP); // crea la matriu de deformacio perspectiva
         modView = MDP * modView;
     }
 
-    VertexCapsa3D(c, vaux);//se pasa la capsa y obtenemos sus vertices
+    VertexCapsa3D(c, vaux);
 
     for(int i=0; i<8; i++) {
         vauxMod[i]= modView * vaux[i];
@@ -109,8 +102,6 @@ void Camera::setProjectionToGPU(QGLShaderProgram *program, mat4 p)
 
 void  Camera::AmpliaWindow(double r)
 {
-    // Pre r = 1.5 => amplia a y h 150% equivalente a un zoom out
-    //para hacer zoom in usar r negativo
     double na, da;
 
     na  = wd.a * (1.0 + r);
@@ -204,8 +195,7 @@ void    Camera::AjustaAspectRatioWd()
     arvp = ((double) vp.h)/((double)(vp.a));
     arwd = wd.h/wd.a;
     if(arwd > arvp) {
-        //wd.a = wd.h/arvp;
-        wd.a = wd.h * 1.008;
+        wd.a = wd.h * 1.0;
     }
     else if (arwd <arvp) {
         wd.h = wd.a *arvp;
@@ -267,7 +257,6 @@ vec4 Camera::CalculObs(vec4 vrp, double d, double angx, double angy)
     double norma;
 
     /* Calcul del vector de visio a partir dels angles */
-    //angx es la latitud y angy la longitud respecto al eje z
 
     v[0] = sin (PI*angy/180.) * cos (PI*angx/180.);
     v[1]= - sin (PI*angx/180.);
@@ -288,32 +277,20 @@ vec4 Camera::CalculObs(vec4 vrp, double d, double angx, double angy)
 
 }
 
-vec3 Camera::CalculVup(double angx, double angy, double angz) // angx, angy, angz, angles de gir del sistema de coords obser
+vec3 Camera::CalculVup(double angx, double angy, double angz)
 {
     vec3 v;
-    /*int  x, y;
-
-    x = 1.0;
-    y = 1.0;
-
-    if (cos(PI*angx/180.)<0.0) y = -1.0;
-
-    if (cos(PI*angy/180.)<0.0) x = -1.0;
 
 
-    v[0] = x*sin (-PI*angz/180.);
-    v[1] = y*cos( -PI*angz/180.);
-    v[2] = 0.0;*/
-
-    double sx = sin(PI*angx/180.); //se supone Rz * Ry * Rx
-    double cx = cos(PI*angx/180.); //ver http://www.songho.ca/opengl/gl_anglestoaxes.html
+    double sx = sin(PI*angx/180.);
+    double cx = cos(PI*angx/180.);
     double sy = sin(PI*angy/180.);
     double cy = cos(PI*angy/180.);
     double sz = sin(PI*angz/180.);
     double cz = cos(PI*angz/180.);
 
-    //v = vec3(-sz*cx+cz*sy*sx, cz*cx+sz*sy*sx, cy*sx);//formula completa
-    v = vec3(sx*sy, cx, sx*cy);//suponiendo angz = 0
+
+    v = vec3(sx*sy, cx, sx*cy);
 
     return(v);
 

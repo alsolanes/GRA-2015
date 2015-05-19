@@ -9,7 +9,6 @@
 
 #include <QtWidgets>
 #include <QGLWidget>
-#include <QTime>
 
 #include <QDir>
 
@@ -34,7 +33,7 @@ public:
     void setYRotation(int angle);
     void setZRotation(int angle);
 
-    bool cameraActual; //true para camara general
+    bool cameraActual;
 
 
 
@@ -76,23 +75,16 @@ private:
 
     bool moviment;
 
-    QGLShader *vshaderFlatGouraud;
-    QGLShader *fshaderFlatGouraud;
-    QGLShader *vshaderPhong;
-    QGLShader *fshaderPhong;
-    QGLShader *vshaderToon;
-    QGLShader *fshaderToon;
+    QGLShader *vertexFlatGouraud;
+    QGLShader *fragmentFlatGouraud;
+    QGLShader *vertexPhong;
+    QGLShader *fragmentPhong;
+    QGLShader *vertexToon;
+    QGLShader *fragmentToon;
 
     // Programa de la GPU
     QGLShaderProgram *program;
-    mat4 m220 = Scale(2.0/20.0, 2.0/20.0, 2.0/20.0);
-    double xRotOld;
-    double yRotOld;
-    double zRotOld;
-    Capsa3D cb;
-    Capsa3D cT;
-    vec3 ctrB;
-    vector<Capsa3D> listaCapsasConjuntBoles;
+    vector<Capsa3D> capses;
     QString shaderActual;
 
     //  Metode per a carregar de fitxers el vertex i el fragment shader

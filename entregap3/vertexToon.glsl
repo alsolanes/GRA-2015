@@ -44,5 +44,4 @@ void main()
 
   Normal = normalize(vNormal);
   v_texcoord = vCoordTexture;
-
 }

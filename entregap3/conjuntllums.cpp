@@ -2,15 +2,15 @@
 
 ConjuntLlums::ConjuntLlums()
 {
-    vec4 posAux = vec4(0.0, 0.1, 1.0, 1);
-    vec4 dirAux = vec4(0.0, 0.1, 1.0 , 0);
+    vec4 posAux = vec4(0.0, 0.2, 1.0, 1);
+    vec4 dirAux = vec4(0.0, 0.2, 1.0 , 0);
     vec4 iambientAux = vec4 (0.2, 0.2, 0.2, 1);
     vec4 idifusaAux = vec4 (0.2, 0.1, 0.5, 1);
-    vec4 iespecularAux = vec4 (0.1, 0.1, 0.1, 1);
-    float angleAux = 60.0;
-    float atenuacioCAux = 0.2;
-    float atenuacioLAux = 0.2;
-    float atenuacioQAux = 0.2;
+    vec4 iespecularAux = vec4 (0.2, 0.2, 0.2, 1);
+    float angleAux = 70.0;
+    float atenuacioCAux = 0.25;
+    float atenuacioLAux = 0.25;
+    float atenuacioQAux = 0.25;
     bool estaActivaAux = true;
     PrimeraLlum = new Llum(posAux,
                            dirAux,
@@ -19,15 +19,13 @@ ConjuntLlums::ConjuntLlums()
                            atenuacioCAux, atenuacioLAux, atenuacioQAux,
                            estaActivaAux);
 
-    posAux = vec4(2.0, 0.1, 1.0, 1);
-    dirAux = vec4(2.0, 0.1, 1.0, 0);
-    iambientAux = vec4 (0.2, 0.2, 0.2, 1);
-    idifusaAux = vec4 (0.2, 0.1, 0.5, 1);
+    posAux = vec4(-1.0, 0.1, 1.0, 1);
+    dirAux = vec4(-1.0, 0.1, 1.0, 0);
+    iambientAux = vec4 (0.4, 0.2, 0.2, 1);
+    idifusaAux = vec4 (0.4, 0.1, 0.5, 1);
     iespecularAux = vec4 (0.1, 0.1, 0.1, 1);
-    angleAux = 60.0;
-    atenuacioCAux = 0.2;
-    atenuacioLAux = 0.2;
-    atenuacioQAux = 0.2;
+    angleAux = 70.0;
+    atenuacioCAux = 0.25; atenuacioLAux = 0.25; atenuacioQAux = 0.25;
     estaActivaAux = true;
     SegonaLlum = new Llum(posAux,
                           dirAux,
@@ -37,15 +35,13 @@ ConjuntLlums::ConjuntLlums()
                           estaActivaAux);
 
 
-    posAux = vec4(-2.0, 0.1, 1.0, 1);
-    dirAux = vec4(-2.0, 0.1, 1.0, 0);
-    iambientAux = vec4 (0.2, 0.2, 0.2, 1);
-    idifusaAux = vec4 (0.2, 0.1, 0.5, 1);
-    iespecularAux = vec4 (0.1, 0.1, 0.1, 1);
-    angleAux = 60.0;
-    atenuacioCAux = 0.2;
-    atenuacioLAux = 0.2;
-    atenuacioQAux = 0.2;
+    posAux = vec4(1.0, 0.4, 1.0, 1);
+    dirAux = vec4(1.0, 0.4, 1.0, 0);
+    iambientAux = vec4 (0.4, 0.2, 0.2, 1);
+    idifusaAux = vec4 (0.4, 0.1, 0.5, 1);
+    iespecularAux = vec4 (0.2, 0.2, 0.2, 1);
+    angleAux = 70.0;
+    atenuacioCAux = 0.25; atenuacioLAux = 0.25; atenuacioQAux = 0.25;
     estaActivaAux = true;
     TerceraLlum = new Llum(posAux,
                            dirAux,
