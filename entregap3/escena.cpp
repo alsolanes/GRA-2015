@@ -170,78 +170,102 @@ void Escena::aplicaTGCentrat(mat4 m) {
     this->aplicaTG(maux);
 }
 
-void Escena::computeCollisions(Capsa3D cb, Capsa3D cT, vec3 ctrB, vector<Capsa3D> listaCapsasConjuntBoles, QKeyEvent *event){
-    double deltaDesplacament = 0.01;
-    dzP=deltaDesplacament, dzN=-deltaDesplacament, dxP=deltaDesplacament, dxN=-deltaDesplacament;
 
-    if(cT.pmin.z - cb.pmin.z > - deltaDesplacament)//si bola blanca a distancia <deltaDesplacament ->abs(dzN) < deltaDesplacament en borde de mesa con z negativos
-        dzN = cT.pmin.z - cb.pmin.z;
-    if(cT.pmin.z + cT.p - (cb.pmin.z + cb.p) < deltaDesplacament)//si bola blanca a distancia <deltaDesplacament ->abs(dzP) < deltaDesplacament en borde de mesa con z positivos
-        dzP = cT.pmin.z + cT.p - (cb.pmin.z + cb.p);
-    if(cT.pmin.x - cb.pmin.x > -deltaDesplacament)//si bola blanca a distancia <deltaDesplacament ->abs(dxN) < deltaDesplacament en borde de mesa con x negativos
-        dxN = cT.pmin.x - cb.pmin.x;
-    if(cT.pmin.x + cT.a - (cb.pmin.x + cb.a) < deltaDesplacament)//si bola blanca a distancia <deltaDesplacament ->abs(dxN) < deltaDesplacament en borde de mesa con x positivos
-        dxP = cT.pmin.x + cT.a - (cb.pmin.x + cb.a);   
 
-    for (int i=0; i<QUANTITAT_BOLES; i++) {//comparamos bola blanca con resto de bolas
-        if(abs(ctrB.x - (listaCapsasConjuntBoles[i].pmin.x+listaCapsasConjuntBoles[i].a/2.)) < 0.0615
-                && abs(ctrB.z  - (listaCapsasConjuntBoles[i].pmin.z+listaCapsasConjuntBoles[i].p/2.)) < 0.0615){
-
-            if(event->key() == Qt::Key_Up){
-                if(ctrB.z - (listaCapsasConjuntBoles[i].pmin.z + listaCapsasConjuntBoles[i].p/2.)<= 0.0){//si bola blanca con menor z que la i no hay limitacion
-                    dzN = -deltaDesplacament;
-                }else{
-                    if(listaCapsasConjuntBoles[i].pmin.z + listaCapsasConjuntBoles[i].p - cb.pmin.z > -deltaDesplacament){//si distancia menor que deltaDesplacament hay limitacion
-                        dzN = listaCapsasConjuntBoles[i].pmin.z + listaCapsasConjuntBoles[i].p - cb.pmin.z;
-                        if(dzN > -0.002)dzN = 0.0;
-                    }
-                }
-            }
-
-            if(event->key() == Qt::Key_Down){
-                if(ctrB.z- (listaCapsasConjuntBoles[i].pmin.z + listaCapsasConjuntBoles[i].p/2.) >= 0.0){//si bola blanca con mayor z que la i no hay limitacion
-                    dzP = deltaDesplacament;
-                }else{
-                    if(listaCapsasConjuntBoles[i].pmin.z - (cb.pmin.z + cb.p) < deltaDesplacament ){//si distancia menor que deltaDesplacament hay limitacion
-                        dzP = listaCapsasConjuntBoles[i].pmin.z - (cb.pmin.z + cb.p);
-                        if(dzP < 0.002)dzP = 0.0;
-                    }
-                }
-            }
-
-            if(event->key() == Qt::Key_Left){
-                if(ctrB.x- (listaCapsasConjuntBoles[i].pmin.x + listaCapsasConjuntBoles[i].a/2.)<= 0.0){//si bola blanca a la izquierda no hay limitacion
-                    dxN = -deltaDesplacament;
-                }else{
-                    if(listaCapsasConjuntBoles[i].pmin.x + listaCapsasConjuntBoles[i].a - cb.pmin.x > -deltaDesplacament){//si distancia menor que deltaDesplacament hay limitacion
-                        dxN = listaCapsasConjuntBoles[i].pmin.x + listaCapsasConjuntBoles[i].a - cb.pmin.x;
-                        if(dxN > -0.002)dxN = 0.0;
-                    }
-                }
-            }
-
-            if(event->key() == Qt::Key_Right){
-                if(ctrB.x- (listaCapsasConjuntBoles[i].pmin.x + listaCapsasConjuntBoles[i].a/2.) >= 0.0){//si bola blanca a la derecha no hay limitacion
-                    dxP = deltaDesplacament;
-                }else{
-                    if(listaCapsasConjuntBoles[i].pmin.x - (cb.pmin.x + cb.a) < deltaDesplacament ){//si distancia menor que deltaDesplacament hay limitacion
-                        dxP = listaCapsasConjuntBoles[i].pmin.x - (cb.pmin.x + cb.a);
-                        if(dxP < 0.002)dxP = 0.0;
-                    }
-                }
-            }
-
+void Escena::move(bool cameraGeneral, int dir){
+    Capsa3D capsaBola = bolaBlanca->capsa;
+    vec3 vecMoviment, posicioFinal;
+    switch (dir)
+    {
+    case 1: //up
+        if(cameraGeneral)
+            vecMoviment = plaBase->vectorVertical();
+        else
+            vecMoviment = normalize(vec3(0,0,1));
+        break;
+    case 2: //down
+        if(cameraGeneral)
+            vecMoviment = -plaBase->vectorVertical();
+        else
+            vecMoviment = -normalize(vec3(0,0,1));
+        break;
+    case 3: //left
+        if(cameraGeneral)
+            vecMoviment = plaBase->vectorHoritzontal();
+        else{
+            vecMoviment = normalize(vec3(1,0,0));
         }
+        break;
+    case 4: //right
+        if(cameraGeneral)
+            vecMoviment = -plaBase->vectorHoritzontal();
+        else{
+            vecMoviment = normalize(vec3(-1,0,0));
+        }
+        break;
     }
+    vecMoviment *= VELOCITAT;
+    posicioFinal = capsaBola.centre + vecMoviment;
+    if (canMove(capsaBola,posicioFinal) && isOnPlaBase(posicioFinal))
+        bolaBlanca->aplicaTG(Translate(vecMoviment.x, 0, vecMoviment.z));
 }
 
+/*
+ * Mètode que comprova les colisions mirant la capsa de la bola i la posició on es troba
+ * Comprova bola a bola per evitar el quadrat que es crea a conjunt boles
+ */
+bool Escena::canMove(Capsa3D capsa, vec3 posicio){
+    Capsa3D capsaBolaAux;
+    vec3 minBlanca, minAux, maxBlanca, maxAux;
+
+    minBlanca = vec3(posicio.x, posicio.y ,posicio.z);
+    maxBlanca = vec3(posicio.x+capsa.a, posicio.y+capsa.h, posicio.z+capsa.p);
+
+    for(int i=0; i<QUANTITAT_BOLES; i++){
+        capsaBolaAux = conjuntBoles->llista_boles[i]->capsa;
+        posicio = capsaBolaAux.centre;
+
+        minAux = vec3(posicio.x,posicio.y, posicio.z);
+        maxAux = vec3(posicio.x+capsaBolaAux.a, posicio.y+capsaBolaAux.h, posicio.z+capsaBolaAux.p);
+
+        if (minBlanca.x < maxAux.x && maxBlanca.x > minAux.x &&
+            minBlanca.y < maxAux.y && maxBlanca.y > minAux.y &&
+            minBlanca.z < maxAux.z && maxBlanca.z > minAux.z)
+            return false;
+    }
+
+    return true;
+}
+
+
+bool Escena::isOnPlaBase(vec3 pos){
+    float radi = bolaBlanca->capsa.a/2;
+    Capsa3D c;
+    vec3 up = plaBase->vectorVertical(), right = plaBase->vectorHoritzontal();
+    vec3 pos2 = (pos - normalize(cross(up, right))*radi);
+    vec3 minBlanca, maxBlanca, minPla, maxPla;
+
+    minBlanca = vec3(pos2.x-radi, pos2.y-radi, pos2.z-radi);
+    maxBlanca = vec3(pos2.x+radi, pos2.y+radi, pos2.z+radi);
+
+    c = plaBase->capsa;
+    vec3 posPla = c.centre;
+    minPla = vec3(posPla.x-c.a/2, posPla.y-c.h/2, posPla.z-c.p/2);
+    maxPla = vec3(posPla.x+c.a/2, posPla.y+c.h/2, posPla.z+c.p/2);
+
+    if (minBlanca.x < maxPla.x && maxBlanca.x > minPla.x &&
+            minBlanca.y <= maxPla.y && maxBlanca.y >= minPla.y &&
+            minBlanca.z < maxPla.z && maxBlanca.z > minPla.z)
+        return true;
+    return false;
+}
 
 void Escena::draw(bool cameraActual) {
     if (taulaBillar!=NULL){
         taulaBillar->toGPU(pr);
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
-        setconTexturaToGPU(pr, teTextura);
+        setLlumiTexturaToGPU(pr, teTextura);
         cam2GPU(cameraActual);
         taulaBillar->draw();
     }
@@ -251,7 +275,7 @@ void Escena::draw(bool cameraActual) {
         plaBase->toGPU(pr);
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
-        setconTexturaToGPU(pr, teTextura);
+        setLlumiTexturaToGPU(pr, teTextura);
         cam2GPU(cameraActual);
         plaBase->draw();
     }
@@ -261,7 +285,7 @@ void Escena::draw(bool cameraActual) {
         bolaBlanca->toGPU(pr);
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
-        setconTexturaToGPU(pr, teTextura);
+        setLlumiTexturaToGPU(pr, teTextura);
         cam2GPU(cameraActual);
         bolaBlanca->draw();
     }
@@ -272,7 +296,7 @@ void Escena::draw(bool cameraActual) {
             conjuntBoles->llista_boles[i]->toGPU(pr);
             setAmbientToGPU(pr);
             conjuntLlums->toGPU(pr);
-            setconTexturaToGPU(pr, teTextura);
+            setLlumiTexturaToGPU(pr, teTextura);
             cam2GPU(cameraActual);
             conjuntBoles->llista_boles[i]->draw();
             }
@@ -292,7 +316,7 @@ void Escena::setAmbientToGPU(QGLShaderProgram *program){
     glUniform4fv(LuzAmbLocation, 1, AmbientLight);
 }
 
-void Escena::setconTexturaToGPU(QGLShaderProgram *program, bool conText)
+void Escena::setLlumiTexturaToGPU(QGLShaderProgram *program, bool conText)
 {
     GLuint conTextLocation = program->uniformLocation("conTextura");
     glUniform1f( conTextLocation, conText );

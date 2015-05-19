@@ -12,7 +12,7 @@ ConjuntLlums::ConjuntLlums()
     float atLin = 0.2;
     float atQuad = 0.2;
     bool on = true;
-    luz1 = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
+    PrimeraLlum = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
 
     pos = vec4(2.0, 0.1, 1.0, 1);
     dir = vec4(2.0, 0.1, 1.0, 0);
@@ -24,7 +24,7 @@ ConjuntLlums::ConjuntLlums()
     atLin = 0.2;
     atQuad = 0.2;
     on = true;
-    luz2 = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
+    SegonaLlum = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
 
     pos = vec4(-2.0, 0.1, 1.0, 1);
     dir = vec4(-2.0, 0.1, 1.0, 0);
@@ -36,23 +36,26 @@ ConjuntLlums::ConjuntLlums()
     atLin = 0.2;
     atQuad = 0.2;
     on = true;
-    luz3 = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
+    TerceraLlum = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
 }
 
 
 void ConjuntLlums::toGPU(QGLShaderProgram *program)
 {
-     if(luz1->ON == true)//solo a la GPU si encendida
+     if(PrimeraLlum->isActive == true)//solo a la GPU si encendida
      {
-       luz1->toGPU(program, (const char*) "light1");
+        PrimeraLlum->nom = "light1";
+        PrimeraLlum->toGPU(program);
      }
-     if(luz2->ON == true)
+     if(SegonaLlum->isActive == true)
      {
-       luz2->toGPU(program, (const char*) "light2");
+        SegonaLlum->nom = "light2";
+        SegonaLlum->toGPU(program);
      }
-     if(luz3->ON == true)
+     if(TerceraLlum->isActive == true)
      {
-       luz3->toGPU(program, (const char*) "light3");
+        TerceraLlum->nom = "light3";
+        TerceraLlum->toGPU(program);
      }
 }
 

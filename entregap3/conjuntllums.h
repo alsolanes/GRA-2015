@@ -12,8 +12,8 @@ public:
     ConjuntLlums();
     ~ConjuntLlums();
     void toGPU(QGLShaderProgram *program);
-
-    Llum *luz1, *luz2, *luz3;
+    // tindrem 3 llums
+    Llum *PrimeraLlum, *SegonaLlum, *TerceraLlum;
 };
 
 #endif // CONJUNTLLUMS_H

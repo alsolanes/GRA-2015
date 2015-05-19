@@ -8,6 +8,10 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
     colors = new color4[npoints];
     vertexsTextura = new vec2[npoints];
     normal = new normal3[npoints];
+    xorig = yorig = zorig = 0;
+    xRot = yRot = zRot = 0;
+
+    Index = 0;
 }
 
 Objecte::Objecte(int npoints, QString n) : numPoints(npoints)
@@ -16,9 +20,7 @@ Objecte::Objecte(int npoints, QString n) : numPoints(npoints)
     colors = new color4[npoints];
     std::cout<<"Estic en el constructor parametritzat del objecte\n";
 
-    xRot = 0;
-    yRot = 0;
-    zRot = 0;
+    xRot = yRot = zRot = 0;
 
 
     Index = 0;
@@ -34,6 +36,7 @@ Objecte::~Objecte()
 {
     delete points;
     delete colors;
+    delete vertexsTextura;
 }
 
 
@@ -42,29 +45,28 @@ Capsa3D Objecte::calculCapsa3D()
 
     // Metode a implementar: calcula la capsa mínima contenidora d'un objecte
     int i;
-    vec3    pmin, pmax;
-
-    pmin.x = points[0].x;
-    pmin.y = points[0].y;
-    pmin.z = points[0].z;
-    pmax = pmin;
-
-    for (i=1; i<numPoints; i++){
-        if(points[i].x < pmin[0]) pmin[0] = points[i].x;//calculo punto minimo
-        if(points[i].y < pmin[1]) pmin[1] = points[i].y;
-        if(points[i].z < pmin[2]) pmin[2] = points[i].z;
-
-        if(points[i].x > pmax[0]) pmax[0] = points[i].x;//calculo punto maximo
-        if(points[i].y > pmax[1]) pmax[1] = points[i].y;
-        if(points[i].z > pmax[2]) pmax[2] = points[i].z;
+    vec3 pmin, pmax;
+    point4 puntActual = points[0];
+    Capsa3D capsaRes;
+    pmin.x = pmax.x = puntActual.x;
+    pmin.y = pmax.y = puntActual.y;
+    pmin.z = pmax.z = puntActual.z;
+    for(i = 0; i<Index; i++){
+        puntActual = points[i]/points[i][3];
+        pmin.x = pmin.x < puntActual.x ? pmin.x : puntActual.x;
+        pmin.y = pmin.y < puntActual.y ? pmin.y : puntActual.y;
+        pmin.z = pmin.z < puntActual.z ? pmin.z : puntActual.z;
+        pmax.x = pmax.x > puntActual.x ? pmax.x : puntActual.x;
+        pmax.y = pmax.y > puntActual.y ? pmax.y : puntActual.y;
+        pmax.z = pmax.z > puntActual.z ? pmax.z : puntActual.z;
     }
 
-    capsa.pmin = pmin;
-    capsa.a = pmax[0]-pmin[0];//anchura
-    capsa.h = pmax[1]-pmin[1];//altura
-    capsa.p = pmax[2]-pmin[2];//profundidad
-
-    return capsa;
+    capsaRes.a = fabs(pmax.x - pmin.x);
+    capsaRes.h = fabs(pmax.y - pmin.y);
+    capsaRes.p = fabs(pmax.z - pmin.z);
+    capsaRes.pmin = pmin;
+    capsaRes.centre = (pmin + pmax)/2.;
+    return capsaRes;
 }
 
 void Objecte::aplicaTG(mat4 m)
@@ -89,36 +91,31 @@ void Objecte::aplicaTGPoints(mat4 m)
     transformed_points = &transformed_points[0];
     points = &points[0];
 
-    for ( int i = 0; i < Index; ++i )
-    {
+    for ( int i = 0; i < Index; ++i ) {
         points[i] = transformed_points[i];
     }
 
     delete transformed_points;
+
+    capsa = calculCapsa3D();
 }
 
 void Objecte::aplicaTGCentrat(mat4 m)
 {
     // Metode a implementar
-
-    capsa = calculCapsa3D();
-    float xTrasl = capsa.pmin.x + capsa.a/2.;//calculo del centro de la caja
-    float yTrasl = capsa.pmin.y + capsa.h/2.;
-    float zTrasl = capsa.pmin.z + capsa.p/2.;
-
-    mat4 mat = Translate(-xTrasl, -yTrasl, -zTrasl);//traslacion al origen
-    mat4 mat2 = Translate(xTrasl, yTrasl, zTrasl);//traslacion del origen a posicion original
-
-    mat4 maux = mat2*m*mat;
-
-    aplicaTG(maux);
+    //el desplacem a l'orígen
+    mat4 ToOrigen = Translate(-capsa.centre.x, -capsa.centre.y, -capsa.centre.z);
+    //el retornem al punt inicial
+    mat4 ToPlace = Translate(capsa.centre.x, capsa.centre.y, capsa.centre.z);
+    //apliquem les matrius en ordre invers
+    aplicaTG(ToPlace*m*ToOrigen);
     capsa = calculCapsa3D();
 
 }
 
 void Objecte::toGPU(QGLShaderProgram *pr){
 
-    program = pr;
+    this->program = pr;
 
     //std::cout<<"Passo les dades de l'objecte a la GPU\n";
 
@@ -151,7 +148,6 @@ void Objecte::toGPU(QGLShaderProgram *pr){
     program->enableAttributeArray(coordTextureLocation);
     program->setAttributeBuffer("vCoordTexture", GL_FLOAT, sizeof(point4)*Index+sizeof(vec3)*Index, 2);
 
-    // Activació de la correspondencia entre les variables
     program->bindAttributeLocation("vPosition", vertexLocation);
     program->bindAttributeLocation("vNormal", normalLocation);
     program->bindAttributeLocation("vCoordTexture", coordTextureLocation);
@@ -160,11 +156,6 @@ void Objecte::toGPU(QGLShaderProgram *pr){
     glEnable(GL_TEXTURE_2D);
 
     glEnable(GL_CULL_FACE);
-    //glDisable(GL_CULL_FACE);
-    //glCullFace(GL_BACK); //por defecto elimina los triangulos que se ven por detras
-    //glFrontFace(GL_CCW); //por defecto los triangulos se definen counterclock wise
-
-    //this->mat->toGPU(program);
 
     program->link();
     program->bind();
@@ -174,9 +165,6 @@ void Objecte::toGPU(QGLShaderProgram *pr){
 // Pintat en la GPU.
 void Objecte::draw()
 {
-    //std::cout<<"Objecte::draw\n";
-
-    //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     glDrawArrays( GL_TRIANGLES, 0, Index );
 }
@@ -201,13 +189,6 @@ void Objecte::make()
         {
             points[Index] = vertexs[cares[i].idxVertices[j]];
             colors[Index] = vec4(base_colors[1], 1.0);
-           /* if(){
-                vertexsTextura[Index] = vec2(0.0, 0.0);
-            }else if(){
-                vertexsTextura[Index] = vec2(1.0, 0.0);
-            }else{
-                vertexsTextura[Index] = vec2(1.0, 1.0);
-            }*/
             Index++;
         }
     }

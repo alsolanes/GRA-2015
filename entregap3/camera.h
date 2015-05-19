@@ -75,9 +75,9 @@ public:
     void toGPU(QGLShaderProgram *program);
 
     void rotate(Capsa3D c);
-    void pan();
-    void zoom();
-    void PrintCamera();
+    void defineAngles(float angX, float angY, float angZ);
+    void pan(double dx, double dy);
+    void zoom(double positiu);
 
 
     VisuSystem vs;      /* Sistema de visualitzacio  */

@@ -13,7 +13,6 @@
 
 #include <QDir>
 
-#define ROTATIONSPEED 8
 
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 #define PROGRAM_COLOR_ATTRIBUTE 1
@@ -41,7 +40,6 @@ public:
 
 public slots:
     void newPlaBase();
-    PlaBase* newPlaBs();
     void newObj(QString fichero);
     void newBola();
     void newConjuntBoles();
@@ -58,13 +56,14 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void keyReleaseEvent(QKeyEvent *event);
-    void Zoom (double inOut);
-    void Pan(double dx, double dy);
-    void changeShader(QString Shading, bool Text);
+    void zoom (double inOut);
+    void pan(double dx, double dy);
+    void changeShader(QString newShader);
 
 private:
     Escena *esc;
 
+    bool texturaActivada;
     double xRot;
     double yRot;
     double zRot;
@@ -94,14 +93,14 @@ private:
     Capsa3D cT;
     vec3 ctrB;
     vector<Capsa3D> listaCapsasConjuntBoles;
-    QTimer *timer;
-    QTimer *timer1;
-    double z;
-    QString tipoShading;
+    QString shaderActual;
 
     //  Metode per a carregar de fitxers el vertex i el fragment shader
    void InitShaderGPU();
 
+   void initFlatGouraud();
+   void initPhong();
+   void initToon();
 
     // Metode que carrega un nou objecte a l'escena
     void newObjecte(Objecte * obj);

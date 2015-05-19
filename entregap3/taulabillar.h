@@ -11,10 +11,10 @@ public:
 
 private:
 
-    //static const int NumVerticesF = 100000;
-    static const int NumVerticesF = 87288;//numero real de vertices para calcular bien la capsa
+    static const int NumVerticesF = 100000;
     static const int NumCares = 300000;
 
 };
 
 #endif // TAULABILLAR_H
+

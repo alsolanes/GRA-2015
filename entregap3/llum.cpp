@@ -5,18 +5,23 @@ Llum::Llum()
 {
 }
 
-Llum::Llum(vec4 pos, vec4 dir, vec4 iA, vec4 iD, vec4 iS, float bAngle, float atConstant, float atLin, float atQuad, bool on){
+Llum::Llum(vec4 posicio,
+           vec4 direccio,
+           vec4 iAmbient, vec4 iDifusa, vec4 iEspecular,
+           float angleObertura,
+           float atenuacioConstant, float atenuacioLineal, float atenuacioQuadratica,
+           bool activa){
 
-    lightPosition = pos;
-    lightDirection = dir;
-    Ia = iA;
-    Id = iD;
-    Is = iS;
-    bmAngle = bAngle;
-    at_constant = atConstant;
-    at_linear = atLin;
-    at_quadratic = atQuad;
-    ON = on;
+    posicio_llum = posicio;
+    direccio_llum = direccio;
+    this->iAmbient = iAmbient;
+    this->iDifusa = iDifusa;
+    this->iEspecular = iEspecular;
+    this->angleObertura = angleObertura;
+    atenuacio_constant = atenuacioConstant;
+    atenuacio_lineal = atenuacioLineal;
+    atenuacio_quadratica = atenuacioQuadratica;
+    isActive = activa;
 }
 
 Llum::~Llum()
@@ -24,27 +29,28 @@ Llum::~Llum()
 
 }
 
-void Llum::toGPU(QGLShaderProgram *program, const char* struc)
+void Llum::toGPU(QGLShaderProgram *program)
 {
 
-    gl_IdLlum.position = program->uniformLocation((const char*)(struc + string(".gpuLightPosition")).c_str());
-    gl_IdLlum.direction = program->uniformLocation((const char*)(struc + string(".gpuLightDirection")).c_str());
-    gl_IdLlum.iA = program->uniformLocation((const char*)(struc + string(".gpuIa")).c_str());
-    gl_IdLlum.iD = program->uniformLocation((const char*)(struc + string(".gpuId")).c_str());
-    gl_IdLlum.iS = program->uniformLocation((const char*)(struc + string(".gpuIs")).c_str());
-    gl_IdLlum.beamAngle = program->uniformLocation((const char*)(struc + string(".gpuBeamAngle")).c_str());
-    gl_IdLlum.att_constant= program->uniformLocation((const char*)(struc + string(".gpuAtt_constant")).c_str());
-    gl_IdLlum.att_linear = program->uniformLocation((const char*)(struc + string(".gpuAtt_linear")).c_str());
-    gl_IdLlum.att_quadratic = program->uniformLocation((const char*)(struc + string(".gpuAtt_quadratic")).c_str());
+    gl_IdLlum.posicio = program->uniformLocation(nom + ".gpuLightPosition");
+    gl_IdLlum.direccio = program->uniformLocation(nom + ".gpuLightDirection");
+    gl_IdLlum.intensitatAmbient = program->uniformLocation(nom + ".gpuIa");
+    gl_IdLlum.intensitatDifusa = program->uniformLocation(nom + ".gpuId");
+    gl_IdLlum.intensitatEspecular = program->uniformLocation(nom + ".gpuIs");
+    gl_IdLlum.angleObertura = program->uniformLocation(nom + ".gpuBeamAngle");
+    gl_IdLlum.atenuacioConstant= program->uniformLocation(nom + ".gpuAtt_constant");
+    gl_IdLlum.atenuacioLineal = program->uniformLocation(nom + ".gpuAtt_linear");
+    gl_IdLlum.atenuacioQuadratica = program->uniformLocation(nom + ".gpuAtt_quadratic");
 
-    glUniform4fv(gl_IdLlum.position, 1, lightPosition);
-    glUniform4fv(gl_IdLlum.direction, 1, lightDirection);
-    glUniform4fv(gl_IdLlum.iA, 1, Ia);
-    glUniform4fv(gl_IdLlum.iD, 1, Id);
-    glUniform4fv(gl_IdLlum.iS, 1, Is);
-    glUniform1f(gl_IdLlum.beamAngle, bmAngle);
-    glUniform1f(gl_IdLlum.att_constant, at_constant);
-    glUniform1f(gl_IdLlum.att_linear, at_linear);
-    glUniform1f(gl_IdLlum.att_quadratic, at_quadratic);
+    glUniform4fv(gl_IdLlum.posicio, 1, posicio_llum);
+    glUniform4fv(gl_IdLlum.direccio, 1, direccio_llum);
+    glUniform4fv(gl_IdLlum.intensitatAmbient, 1, iAmbient);
+    glUniform4fv(gl_IdLlum.intensitatDifusa, 1, iDifusa);
+    glUniform4fv(gl_IdLlum.intensitatEspecular, 1, iEspecular);
+    glUniform1f(gl_IdLlum.angleObertura, angleObertura);
+    glUniform1f(gl_IdLlum.atenuacioConstant, atenuacio_constant);
+    glUniform1f(gl_IdLlum.atenuacioLineal, atenuacio_lineal);
+    glUniform1f(gl_IdLlum.atenuacioQuadratica, atenuacio_quadratica);
 }
+
 

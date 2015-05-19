@@ -23,6 +23,8 @@
 #include <QKeyEvent>
 #include <conjuntllums.h>
 
+#define VELOCITAT 0.03
+
 using namespace std;
 
 class Escena
@@ -48,7 +50,11 @@ public:
     void cam2GPU(bool cameraActual);
     void computeCollisions(Capsa3D cb, Capsa3D cT, vec3 ctrB, vector<Capsa3D> listaCapsasConjuntBoles, QKeyEvent *event);
     void setAmbientToGPU(QGLShaderProgram *program);
-    void setconTexturaToGPU(QGLShaderProgram *program, bool conText);
+    void setLlumiTexturaToGPU(QGLShaderProgram *program, bool teTextura);
+
+    void move(bool cameraGeneral, int dir);
+    bool canMove(Capsa3D capsa, vec3 posicio);
+    bool isOnPlaBase(vec3 posicio);
 
     QGLShaderProgram *pr;
     // Capsa contenedora de l'escena

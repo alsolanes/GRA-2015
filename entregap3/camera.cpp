@@ -337,16 +337,21 @@ void Camera::VertexCapsa3D(Capsa3D capsaMinima, vec4 vaux[8])
     vaux[7] = vec4(ptfi[0], ptfi[1], ptfi[2], 1.0);
 }
 
-
-void Camera::PrintCamera(){
-
-    std::cout<<"\nangx: "<<vs.angx<<", angy: "<<vs.angy<<", angz: "<<vs.angz<<std::endl;
-    std::cout<<"vrp[0]: "<<vs.vrp[0]<<", vrp[1]: "<<vs.vrp[1]<<", vrp[2]: "<<vs.vrp[2]<<std::endl;
-    std::cout<<"obs[0]: "<<vs.obs[0]<<", obs[1]: "<<vs.obs[1]<<", obs[2]: "<<vs.obs[2]<<std::endl;
-    std::cout<<"vup[0]: "<<vs.vup[0]<<", vup[1]: "<<vs.vup[1]<<", vup[2]: "<<vs.vup[2]<<std::endl;
-    std::cout<<"d: "<<piram.d<<", dant: "<<piram.dant<<", dpost: "<<piram.dpost<<std::endl;
-    std::cout<<"wd.pmin[0]: "<<wd.pmin[0]<<", wd.pmin[1]: "<<wd.pmin[1]<<", wd.a: "<<wd.a<<", wd.h: "<<wd.h<<std::endl;
-    std::cout<<"vp.pmin[0]: "<<vp.pmin[0]<<", vp.pmin[1]: "<<vp.pmin[1]<<", vp.a: "<<vp.a<<", vp.h: "<<vp.h<<std::endl;
+void Camera::defineAngles(float angX, float angY, float angZ){
+    vs.angx=angX;
+    vs.angy=angY;
+    vs.angz=angZ;
 }
 
+void Camera::zoom(double positiu){
+    AmpliaWindow(positiu);
+    CalculaMatriuProjection();
+}
+
+
+void Camera::pan(double dx, double dy){
+    wd.pmin.x = wd.pmin.x + dx;
+    wd.pmin.y = wd.pmin.y + dy;
+    CalculaMatriuProjection();
+}
 
