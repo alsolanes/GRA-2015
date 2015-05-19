@@ -35,10 +35,10 @@ uniform tipusLlum llum3;
 uniform vec4 llumAmbient;
 
 struct tipusMaterial{
-    vec4 cA;
-    vec4 cD;
-    vec4 cS;
-    float coefRefEsp;
+    vec4 compA;
+    vec4 compD;
+    vec4 compE;
+    float coefReflexEsp;
 };
 
 uniform tipusMaterial material;
@@ -57,25 +57,25 @@ void main()
   
   
 
-  vec4 ambient1 = llum1.gpuIntensitatAmbient * material.cA;
-  vec4 diffuse1 = llum1.gpuIntensitatDifusa * material.cD * max( dot(Light1, N), 0.0 );
-  vec4 specular1 = max(pow(max(dot(N, H1), 0.0), material.coefRefEsp) * llum1.gpuIntensitatEspecular * material.cS , 0.0);
+  vec4 ambient1 = llum1.gpuIntensitatAmbient * material.compA;
+  vec4 diffuse1 = llum1.gpuIntensitatDifusa * material.compD * max( dot(Light1, N), 0.0 );
+  vec4 specular1 = max(pow(max(dot(N, H1), 0.0), material.coefReflexEsp) * llum1.gpuIntensitatEspecular * material.compE , 0.0);
   float attDist1 = 1.0/(llum1.gpuAtenuacioConstant + llum1.gpuAtenuacioLineal * dist1 + llum1.gpuAtenuacioQuadratica * pow(dist1,2.0) );
   vec4 Ilum1 = attDist1 * (ambient1 + diffuse1 + specular1);
 
-  vec4 ambient2 = llum2.gpuIntensitatAmbient * material.cA;
-  vec4 diffuse2 = llum2.gpuIntensitatDifusa * material.cD * max( dot(Light2, N), 0.0 );
-  vec4 specular2 = max(pow(max(dot(N, H2), 0.0), material.coefRefEsp) * llum2.gpuIntensitatEspecular * material.cS , 0.0);
+  vec4 ambient2 = llum2.gpuIntensitatAmbient * material.compA;
+  vec4 diffuse2 = llum2.gpuIntensitatDifusa * material.compD * max( dot(Light2, N), 0.0 );
+  vec4 specular2 = max(pow(max(dot(N, H2), 0.0), material.coefReflexEsp) * llum2.gpuIntensitatEspecular * material.compE , 0.0);
   float attDist2 = 1.0/(llum2.gpuAtenuacioConstant + llum2.gpuAtenuacioLineal * dist2 + llum2.gpuAtenuacioQuadratica * pow(dist2,2.0) );
   vec4 Ilum2 = attDist2 * (ambient2 + diffuse2 + specular2);
 
-  vec4 ambient3 = llum3.gpuIntensitatAmbient * material.cA;
-  vec4 diffuse3 = llum3.gpuIntensitatDifusa * material.cD * max( dot(Light3, N), 0.0 );
-  vec4 specular3 = max(pow(max(dot(N, H3), 0.0), material.coefRefEsp) * llum3.gpuIntensitatEspecular * material.cS , 0.0);
+  vec4 ambient3 = llum3.gpuIntensitatAmbient * material.compA;
+  vec4 diffuse3 = llum3.gpuIntensitatDifusa * material.compD * max( dot(Light3, N), 0.0 );
+  vec4 specular3 = max(pow(max(dot(N, H3), 0.0), material.coefReflexEsp) * llum3.gpuIntensitatEspecular * material.compE , 0.0);
   float attDist3 = 1.0/(llum3.gpuAtenuacioConstant + llum3.gpuAtenuacioLineal * dist3 + llum3.gpuAtenuacioQuadratica * pow(dist3,2.0) );
   vec4 Ilum3 = attDist3 * (ambient3 + diffuse3 + specular3);
 
-  vec4 color =  llumAmbient * material.cA  + Ilum1 + Ilum2 + Ilum3;
+  vec4 color =  llumAmbient * material.compA  + Ilum1 + Ilum2 + Ilum3;
   color[3] = 1.0;
 
    if(teTextura){

@@ -42,10 +42,10 @@ uniform tipusLlum llum3;
 uniform vec4 llumAmbient;
 
 struct tipusMaterial{
-    vec4 cA;
-    vec4 cD;
-    vec4 cS;
-    float coefRefEsp;
+    vec4 compA;
+    vec4 compD;
+    vec4 compE;
+    float coefReflexEsp;
 };
 
 uniform tipusMaterial material;

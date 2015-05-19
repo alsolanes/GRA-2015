@@ -31,7 +31,7 @@ void main()
     float intensity;
     vec4 color;
 
-    intensity = dot(normalize(llum1.gpuPosicioLlum.xyz), Normal);//si consideramos luz direccional que apunta al origen de coord. en el world
+    intensity = dot(normalize(llum1.gpuPosicioLlum.xyz), Normal);
 
     if (intensity > 0.9)
         color = vec4(0.8, 1.0, 0.8, 1.0);
