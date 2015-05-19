@@ -2,59 +2,75 @@
 
 ConjuntLlums::ConjuntLlums()
 {
-    vec4 pos = vec4(0.0, 0.1, 1.0, 1);
-    vec4 dir = vec4(0.0, 0.1, 1.0 , 0);
-    vec4 ia = vec4 (0.2, 0.2, 0.2, 1);
-    vec4 id = vec4 (0.2, 0.1, 0.5, 1);
-    vec4 is = vec4 (0.1, 0.1, 0.1, 1);
-    float bAngle = 60.0;
-    float atConst = 0.2;
-    float atLin = 0.2;
-    float atQuad = 0.2;
-    bool on = true;
-    PrimeraLlum = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
+    vec4 posAux = vec4(0.0, 0.1, 1.0, 1);
+    vec4 dirAux = vec4(0.0, 0.1, 1.0 , 0);
+    vec4 iambientAux = vec4 (0.2, 0.2, 0.2, 1);
+    vec4 idifusaAux = vec4 (0.2, 0.1, 0.5, 1);
+    vec4 iespecularAux = vec4 (0.1, 0.1, 0.1, 1);
+    float angleAux = 60.0;
+    float atenuacioCAux = 0.2;
+    float atenuacioLAux = 0.2;
+    float atenuacioQAux = 0.2;
+    bool estaActivaAux = true;
+    PrimeraLlum = new Llum(posAux,
+                           dirAux,
+                           iambientAux, idifusaAux, iespecularAux,
+                           angleAux,
+                           atenuacioCAux, atenuacioLAux, atenuacioQAux,
+                           estaActivaAux);
 
-    pos = vec4(2.0, 0.1, 1.0, 1);
-    dir = vec4(2.0, 0.1, 1.0, 0);
-    ia = vec4 (0.2, 0.2, 0.2, 1);
-    id = vec4 (0.2, 0.1, 0.5, 1);
-    is = vec4 (0.1, 0.1, 0.1, 1);
-    bAngle = 60.0;
-    atConst = 0.2;
-    atLin = 0.2;
-    atQuad = 0.2;
-    on = true;
-    SegonaLlum = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
+    posAux = vec4(2.0, 0.1, 1.0, 1);
+    dirAux = vec4(2.0, 0.1, 1.0, 0);
+    iambientAux = vec4 (0.2, 0.2, 0.2, 1);
+    idifusaAux = vec4 (0.2, 0.1, 0.5, 1);
+    iespecularAux = vec4 (0.1, 0.1, 0.1, 1);
+    angleAux = 60.0;
+    atenuacioCAux = 0.2;
+    atenuacioLAux = 0.2;
+    atenuacioQAux = 0.2;
+    estaActivaAux = true;
+    SegonaLlum = new Llum(posAux,
+                          dirAux,
+                          iambientAux, idifusaAux, iespecularAux,
+                          angleAux,
+                          atenuacioCAux, atenuacioLAux, atenuacioQAux,
+                          estaActivaAux);
 
-    pos = vec4(-2.0, 0.1, 1.0, 1);
-    dir = vec4(-2.0, 0.1, 1.0, 0);
-    ia = vec4 (0.2, 0.2, 0.2, 1);
-    id = vec4 (0.2, 0.1, 0.5, 1);
-    is = vec4 (0.1, 0.1, 0.1, 1);
-    bAngle = 60.0;
-    atConst = 0.2;
-    atLin = 0.2;
-    atQuad = 0.2;
-    on = true;
-    TerceraLlum = new Llum(pos, dir, ia, id, is, bAngle, atConst, atLin, atQuad, on);
+
+    posAux = vec4(-2.0, 0.1, 1.0, 1);
+    dirAux = vec4(-2.0, 0.1, 1.0, 0);
+    iambientAux = vec4 (0.2, 0.2, 0.2, 1);
+    idifusaAux = vec4 (0.2, 0.1, 0.5, 1);
+    iespecularAux = vec4 (0.1, 0.1, 0.1, 1);
+    angleAux = 60.0;
+    atenuacioCAux = 0.2;
+    atenuacioLAux = 0.2;
+    atenuacioQAux = 0.2;
+    estaActivaAux = true;
+    TerceraLlum = new Llum(posAux,
+                           dirAux,
+                           iambientAux, idifusaAux, iespecularAux,
+                           angleAux,
+                           atenuacioCAux, atenuacioLAux, atenuacioQAux,
+                           estaActivaAux);
 }
 
-
+//enviarem a la gpu les llums actives
 void ConjuntLlums::toGPU(QGLShaderProgram *program)
 {
-     if(PrimeraLlum->isActive == true)//solo a la GPU si encendida
+     if(PrimeraLlum->isActive == true)
      {
-        PrimeraLlum->nom = "light1";
+        PrimeraLlum->nom = "llum1";
         PrimeraLlum->toGPU(program);
      }
      if(SegonaLlum->isActive == true)
      {
-        SegonaLlum->nom = "light2";
+        SegonaLlum->nom = "llum2";
         SegonaLlum->toGPU(program);
      }
      if(TerceraLlum->isActive == true)
      {
-        TerceraLlum->nom = "light3";
+        TerceraLlum->nom = "llum3";
         TerceraLlum->toGPU(program);
      }
 }

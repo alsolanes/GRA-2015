@@ -19,30 +19,27 @@ uniform mat4 model_view;
 uniform mat4 projection;
 
 struct tipusLlum{
-    vec4 gpuLightPosition;
-    vec4 gpuLightDirection;
-    vec4 gpuIa;
-    vec4 gpuId;
-    vec4 gpuIs;
-    float gpuBeamAngle;
-    float gpuAtt_constant;
-    float gpuAtt_linear;
-    float gpuAtt_quadratic;
+    vec4 gpuPosicioLlum;
+    vec4 gpuDireccioLlum;
+    vec4 gpuIntensitatAmbient;
+    vec4 gpuIntensitatDifusa;
+    vec4 gpuIntensitatEspecular;
+    float gpuAngleObertura;
+    float gpuAtenuacioConstant;
+    float gpuAtenuacioLineal;
+    float gpuAtenuacioQuadratica;
 };
 
-uniform tipusLlum light1;
-uniform tipusLlum light2;
-uniform tipusLlum light3;
-uniform vec4 LuzAmbiente;
-
-
-uniform bool conTextura;
+uniform tipusLlum llum1;
+uniform tipusLlum llum2;
+uniform tipusLlum llum3;
+uniform vec4 llumAmbient;
+uniform bool teTextura;
 
 
 void main()
 {
   gl_Position = projection * model_view * vPosition;
-  //gl_Position = gl_Position/gl_Position.w;
   gl_Position[3] = 1.0;
 
   Normal = normalize(vNormal);

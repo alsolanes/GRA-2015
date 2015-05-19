@@ -12,7 +12,7 @@
 
 typedef Common::vec4  color4;
 typedef Common::vec4  point4;
-typedef Common::vec3  normal3;
+typedef Common::vec3  normaLight3;
 
 using namespace std;
 
@@ -49,7 +49,7 @@ protected:
 
 public:
     int Index;
-    normal3 *normal;
+    normaLight3 *normal;
   // Capsa mínima contenidora de l'objecte
     Capsa3D capsa;
     QOpenGLTexture *texture;

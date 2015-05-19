@@ -8,21 +8,19 @@
 class Material
 {
 public:
-    Material();
-    Material(vec4 cA, vec4 cD, vec4 cE, float coefRefEsp);
+    Material(vec4 compAmbient, vec4 compDifusa, vec4 compEspecular, float coefReflexioExpecular);
     ~Material();
     void toGPU(QGLShaderProgram *program);
 
-    //atributos opticos del material
-    vec4 cA, cD, cE;
-    float coefRefEsp;
+    vec4 componentAmbient, componentDifusa, componentEspecular;
+    float coeficientReflexioEspecular;
 
     struct
     {
-        GLuint cA;
-        GLuint cD;
-        GLuint cE;
-        GLuint coefRefEsp;
+        GLuint componentAmbient;
+        GLuint componentDifusa;
+        GLuint componentEspecular;
+        GLuint coeficientReflexioEspecular;
     }gl_IdMaterial;
 };
 

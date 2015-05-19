@@ -32,15 +32,15 @@ Llum::~Llum()
 void Llum::toGPU(QGLShaderProgram *program)
 {
 
-    gl_IdLlum.posicio = program->uniformLocation(nom + ".gpuLightPosition");
-    gl_IdLlum.direccio = program->uniformLocation(nom + ".gpuLightDirection");
-    gl_IdLlum.intensitatAmbient = program->uniformLocation(nom + ".gpuIa");
-    gl_IdLlum.intensitatDifusa = program->uniformLocation(nom + ".gpuId");
-    gl_IdLlum.intensitatEspecular = program->uniformLocation(nom + ".gpuIs");
-    gl_IdLlum.angleObertura = program->uniformLocation(nom + ".gpuBeamAngle");
-    gl_IdLlum.atenuacioConstant= program->uniformLocation(nom + ".gpuAtt_constant");
-    gl_IdLlum.atenuacioLineal = program->uniformLocation(nom + ".gpuAtt_linear");
-    gl_IdLlum.atenuacioQuadratica = program->uniformLocation(nom + ".gpuAtt_quadratic");
+    gl_IdLlum.posicio = program->uniformLocation(nom + ".gpuPosicioLlum");
+    gl_IdLlum.direccio = program->uniformLocation(nom + ".gpuDireccioLlum");
+    gl_IdLlum.intensitatAmbient = program->uniformLocation(nom + ".gpuIntensitatAmbient");
+    gl_IdLlum.intensitatDifusa = program->uniformLocation(nom + ".gpuIntensitatDifusa");
+    gl_IdLlum.intensitatEspecular = program->uniformLocation(nom + ".gpuIntensitatEspecular");
+    gl_IdLlum.angleObertura = program->uniformLocation(nom + ".gpuAngleObertura");
+    gl_IdLlum.atenuacioConstant= program->uniformLocation(nom + ".gpuAtenuacioConstant");
+    gl_IdLlum.atenuacioLineal = program->uniformLocation(nom + ".gpuAtenuacioLineal");
+    gl_IdLlum.atenuacioQuadratica = program->uniformLocation(nom + ".gpuAtenuacioQuadratica");
 
     glUniform4fv(gl_IdLlum.posicio, 1, posicio_llum);
     glUniform4fv(gl_IdLlum.direccio, 1, direccio_llum);

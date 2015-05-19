@@ -78,7 +78,7 @@ vec2 Bola::coordText(const point4 &c)
 
 void Bola::triangle( const point4& a, const point4& b, const point4& c ){
 
-    normal3 n = cross(a-b,b-c);
+    normaLight3 n = cross(a-b,b-c);
 
     points[Index] = a;
     //colors[Index] = color4(1.0, 1.0, 1.0, 1.0);

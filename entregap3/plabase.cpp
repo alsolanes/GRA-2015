@@ -46,7 +46,7 @@ void PlaBase::make()
 
 void PlaBase::quad( int a, int b, int c, int d )
 {
-    normal3 n = cross(vertices[a] - vertices[b],vertices[b] - vertices[c]); //normal para cualquier shading
+    normaLight3 n = cross(vertices[a] - vertices[b],vertices[b] - vertices[c]); //normal para cualquier shading
 
     points[Index] = vertices[a]; vertexsTextura[Index] = vec2(1.0, 0.0);  normal[Index] = n; Index++;
     points[Index] = vertices[b]; vertexsTextura[Index] = vec2(0.0, 0.0);  normal[Index] = n; Index++;

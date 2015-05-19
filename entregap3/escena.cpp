@@ -116,7 +116,7 @@ void Escena::addObjecte(Objecte *obj) {
 void Escena::CapsaMinCont3DEscena()
 {
     // Metode a implementar
-    Capsa3D c;
+    Capsa3D capsaAux;
     vec3 pmax;
 
     capsaMinima.pmin[0]=INFINITY;
@@ -127,47 +127,47 @@ void Escena::CapsaMinCont3DEscena()
     pmax[2] = -INFINITY;
 
     for (int i=0; i<listaObjectes.size(); i++) {
-        c = listaObjectes[i]->calculCapsa3D();
+        capsaAux = listaObjectes[i]->calculCapsa3D();
 
-        if (capsaMinima.pmin[0]>c.pmin[0]) capsaMinima.pmin[0] = c.pmin[0];
-        if (capsaMinima.pmin[1]>c.pmin[1]) capsaMinima.pmin[1] = c.pmin[1];
-        if (capsaMinima.pmin[2]>c.pmin[2]) capsaMinima.pmin[2] = c.pmin[2];
-        if (pmax[0]<c.pmin[0]+c.a) pmax[0] = c.pmin[0]+c.a;
-        if (pmax[1]<c.pmin[1]+c.h) pmax[1] = c.pmin[1]+c.h;
-        if (pmax[2]<c.pmin[2]+c.p) pmax[2] = c.pmin[2]+c.p;
+        if (capsaMinima.pmin[0]>capsaAux.pmin[0])
+            capsaMinima.pmin[0] = capsaAux.pmin[0];
+        if (pmax[0]<capsaAux.pmin[0]+capsaAux.a)
+            pmax[0] = capsaAux.pmin[0]+capsaAux.a;
+        if (capsaMinima.pmin[1]>capsaAux.pmin[1])
+            capsaMinima.pmin[1] = capsaAux.pmin[1];
+        if (pmax[1]<capsaAux.pmin[1]+capsaAux.h)
+            pmax[1] = capsaAux.pmin[1]+capsaAux.h;
+        if (capsaMinima.pmin[2]>capsaAux.pmin[2])
+            capsaMinima.pmin[2] = capsaAux.pmin[2];
+        if (pmax[2]<capsaAux.pmin[2]+capsaAux.p)
+            pmax[2] = capsaAux.pmin[2]+capsaAux.p;
     }
     capsaMinima.a = pmax[0]-capsaMinima.pmin[0];
     capsaMinima.h = pmax[1]-capsaMinima.pmin[1];
     capsaMinima.p = pmax[2]-capsaMinima.pmin[2];
+    capsaMinima.centre = capsaMinima.pmin + vec3(capsaMinima.a/2, capsaMinima.h/2, capsaMinima.p/2);
 }
 
 void Escena::aplicaTG(mat4 m) {
 
-    if (taulaBillar!=NULL)
-        taulaBillar->aplicaTG(m);
-    if (plaBase!=NULL)
-        plaBase->aplicaTG(m);
-    if (bolaBlanca!=NULL)
-        bolaBlanca->aplicaTG(m);
-    if (conjuntBoles!=NULL){
-            for (int i=0; i<QUANTITAT_BOLES; i++) {
-                    conjuntBoles->llista_boles[i]->aplicaTG(m);
-            };
-    }
+    for(unsigned int i=0;i<QUANTITAT_BOLES;i++)
+        listaObjectes[i]->aplicaTG(m);
 
 }
 
 void Escena::aplicaTGCentrat(mat4 m) {
 
-    this->CapsaMinCont3DEscena();
-
-    float xTrasl = capsaMinima.pmin.x + capsaMinima.a/2.;//calculo del centro de la caja de la escena
-    float yTrasl = capsaMinima.pmin.y + capsaMinima.h/2.;
-    float zTrasl = capsaMinima.pmin.z + capsaMinima.p/2.;
-
-    mat4 maux = Translate(xTrasl, yTrasl, zTrasl) * m * Translate(-xTrasl, -yTrasl, -zTrasl);
-
-    this->aplicaTG(maux);
+    // Metode a modificar
+    // matrius per tornar a l'origen(centrar)
+    mat4 T1 = Translate(capsaMinima.centre.x, capsaMinima.centre.y, capsaMinima.centre.z);
+    mat4 T2 = Translate(-capsaMinima.centre.x, -capsaMinima.centre.y, -capsaMinima.centre.z);
+    // matrius de la transformacio a aplicar a cada objecte(recordar que primer s'aplica T2)
+    mat4 mRes = T1*m*T2;
+    //apliquem la transformacio a tots els objectes
+    for(unsigned int i = 0; i < QUANTITAT_BOLES; i++)
+        listaObjectes[i]->aplicaTGCentrat(mRes);
+    //recalculem la capsa
+    CapsaMinCont3DEscena();
 }
 
 
@@ -263,30 +263,39 @@ bool Escena::isOnPlaBase(vec3 pos){
 void Escena::draw(bool cameraActual) {
     if (taulaBillar!=NULL){
         taulaBillar->toGPU(pr);
+
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
+
         setLlumiTexturaToGPU(pr, teTextura);
-        cam2GPU(cameraActual);
+
+        camGeneral.toGPU(pr);
         taulaBillar->draw();
     }
 
     if (plaBase!=NULL){
         plaBase->texture->bind(0);
         plaBase->toGPU(pr);
+
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
+
         setLlumiTexturaToGPU(pr, teTextura);
-        cam2GPU(cameraActual);
+
+        camGeneral.toGPU(pr);
         plaBase->draw();
     }
 
     if (bolaBlanca!=NULL){
         bolaBlanca->texture->bind(0);
         bolaBlanca->toGPU(pr);
+
         setAmbientToGPU(pr);
         conjuntLlums->toGPU(pr);
+
         setLlumiTexturaToGPU(pr, teTextura);
-        cam2GPU(cameraActual);
+
+        camGeneral.toGPU(pr);
         bolaBlanca->draw();
     }
 
@@ -294,31 +303,27 @@ void Escena::draw(bool cameraActual) {
         for (int i=0; i<QUANTITAT_BOLES; i++) {
             conjuntBoles->llista_boles[i]->texture->bind(0);
             conjuntBoles->llista_boles[i]->toGPU(pr);
+
             setAmbientToGPU(pr);
             conjuntLlums->toGPU(pr);
+
             setLlumiTexturaToGPU(pr, teTextura);
-            cam2GPU(cameraActual);
+
+            camGeneral.toGPU(pr);
             conjuntBoles->llista_boles[i]->draw();
-            }
+        }
     }
 }
 
-void Escena::cam2GPU(bool cameraActual){
-
-    if(cameraActual == true){
-        camGeneral.toGPU(pr);
-    }else{
-    }
-}
 
 void Escena::setAmbientToGPU(QGLShaderProgram *program){
-    GLuint LuzAmbLocation = program->uniformLocation("LuzAmbiente");
+    GLuint LuzAmbLocation = program->uniformLocation("llumAmbient");
     glUniform4fv(LuzAmbLocation, 1, AmbientLight);
 }
 
 void Escena::setLlumiTexturaToGPU(QGLShaderProgram *program, bool conText)
 {
-    GLuint conTextLocation = program->uniformLocation("conTextura");
+    GLuint conTextLocation = program->uniformLocation("teTextura");
     glUniform1f( conTextLocation, conText );
 }
 

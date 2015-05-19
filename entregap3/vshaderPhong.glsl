@@ -13,33 +13,33 @@ IN vec2 vCoordTexture;
 OUT vec2 v_texcoord;
 
 OUT vec3 pos;
-OUT vec3 L1;
-OUT vec3 L2;
-OUT vec3 L3;
+OUT vec3 Light1;
+OUT vec3 Light2;
+OUT vec3 Light3;
 OUT vec3 N;
-OUT float distance1;
-OUT float distance2;
-OUT float distance3;
+OUT float dist1;
+OUT float dist2;
+OUT float dist3;
 
 uniform mat4 model_view;
 uniform mat4 projection;
 
 struct tipusLlum{
-    vec4 gpuLightPosition;
-    vec4 gpuLightDirection;
-    vec4 gpuIa;
-    vec4 gpuId;
-    vec4 gpuIs;
-    float gpuBeamAngle;
-    float gpuAtt_constant;
-    float gpuAtt_linear;
-    float gpuAtt_quadratic;
+    vec4 gpuPosicioLlum;
+    vec4 gpuDireccioLlum;
+    vec4 gpuIntensitatAmbient;
+    vec4 gpuIntensitatDifusa;
+    vec4 gpuIntensitatEspecular;
+    float gpuAngleObertura;
+    float gpuAtenuacioConstant;
+    float gpuAtenuacioLineal;
+    float gpuAtenuacioQuadratica;
 };
 
-uniform tipusLlum light1;
-uniform tipusLlum light2;
-uniform tipusLlum light3;
-uniform vec4 LuzAmbiente;
+uniform tipusLlum llum1;
+uniform tipusLlum llum2;
+uniform tipusLlum llum3;
+uniform vec4 llumAmbient;
 
 struct tipusMaterial{
     vec4 cA;
@@ -49,7 +49,7 @@ struct tipusMaterial{
 };
 
 uniform tipusMaterial material;
-uniform bool conTextura;
+uniform bool teTextura;
 
 
 void main()
@@ -59,14 +59,14 @@ void main()
   gl_Position[3] = 1.0;
 
   pos = (model_view * vPosition).xyz;
-  L1 = normalize( (model_view * light1.gpuLightPosition).xyz - pos );
-  L2 = normalize( (model_view * light2.gpuLightPosition).xyz - pos );
-  L3 = normalize( (model_view * light3.gpuLightPosition).xyz - pos );
+  Light1 = normalize( (model_view * llum1.gpuPosicioLlum).xyz - pos );
+  Light2 = normalize( (model_view * llum2.gpuPosicioLlum).xyz - pos );
+  Light3 = normalize( (model_view * llum3.gpuPosicioLlum).xyz - pos );
   N = normalize( model_view * vec4(vNormal, 0.0) ).xyz;
 
-  distance1 = length(light1.gpuLightPosition - vPosition);
-  distance2 = length(light2.gpuLightPosition - vPosition);
-  distance3 = length(light3.gpuLightPosition - vPosition);
+  dist1 = length(llum1.gpuPosicioLlum - vPosition);
+  dist2 = length(llum2.gpuPosicioLlum - vPosition);
+  dist3 = length(llum3.gpuPosicioLlum - vPosition);
 
   v_texcoord = vCoordTexture;
 

@@ -10,11 +10,11 @@ IN vec4 color;
 IN vec2 v_texcoord;
 
 uniform sampler2D texMap;
-uniform bool conTextura;
+uniform bool teTextura;
 
 void main()
 {
-    if(conTextura == true){
+    if(teTextura){
         gl_FragColor = 0.25 * color + 0.75 * texture2D(texMap, v_texcoord);
     }else{
         gl_FragColor = color;

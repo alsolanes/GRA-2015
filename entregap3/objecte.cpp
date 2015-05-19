@@ -7,7 +7,7 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,
     points = new point4[npoints];
     colors = new color4[npoints];
     vertexsTextura = new vec2[npoints];
-    normal = new normal3[npoints];
+    normal = new normaLight3[npoints];
     xorig = yorig = zorig = 0;
     xRot = yRot = zRot = 0;
 
